@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-xs-12"> <!-- Uses full width of page -->
+    <button class="btn btn-success"> Create New Recipe </button>
+  </div>
+</div>
+<hr> <!-- horizontal line - space in between -->
+<div class="row">
+  <div class="col-xs-12"> <!-- Uses full width of page (12 represents whole screen) -->
+    <app-recipe-item
+      *ngFor="let Elrecipe of recipes"
+      [recipe]="Elrecipe"> <!-- the recipe clicked is outputted further into recipes component -->
+      <!-- the Elrecipe represents the item in for loop,
+      [recipe] is the @input object in the component recipe-item -
+      successful communication through parent and child component -->
+    </app-recipe-item>
+  </div>
+</div>

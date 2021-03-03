@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-xs-12"> <!-- column using full available width-->
+<!--    <img-->
+<!--      src="{{recipe.imagePath}}"-->
+<!--      alt=""-->
+<!--      class="img-responsive" style="max-height: 300px">-->
+    <app-video></app-video>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12"> <!-- column using full available width-->
+    <h3>{{recipe.name}}</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="btn-group"
+         appDropdown>
+      <button type="button" class="btn btn-primary dropdown-toggle"><!-- button and dropdown feature  -->
+        Manage recipe <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="#">Add to Shopping</a> <!-- Not needed for MY PROJECT  -->
+          <a href="#">Edit Recipe</a>
+          <a href="#">Delete Recipe</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <p>
+      Description of Recipe:
+      {{recipe.description}}
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <ul class="list-group">
+      <li class="list-group-item"
+      *ngFor="let ingredient of recipe.ingredients"> <!-- recipe is installed through input -->
+        {{ingredient.name}}: {{ingredient.amount}} <!-- displays ingredient and amount -->
+      </li>
+    </ul>
+  </div>
+</div>

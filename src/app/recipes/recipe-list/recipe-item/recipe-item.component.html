@@ -1,0 +1,20 @@
+<a href="#" class="list-group-item clearfix" (click)="onImageClicked()">
+  <!-- make it look like a list group item from bootstrap
+   (click) starts method onImageClicked, which emits current recipe -
+   to display at  recipe-specific - that specific recipe-->
+  <div class="pull-left"> <!-- put on left side of the list -->
+    <h4 class="list-group-item-heading"> <!-- heading for list (what recipe will contain) -->
+      {{recipe.name}}
+    </h4>
+    <p class="list-group-item-text"> <!-- description for recipe -->
+      {{recipe.description}}
+    </p>
+  </div>
+  <span class="pull-right"> <!-- imagepath for recipe -->
+      <img
+            src="{{recipe.imagePath}}"
+            alt="{{recipe.imagePath}}"
+            class="img-responsive"
+            style="max-height: 80px;">
+  </span>
+</a>

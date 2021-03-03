@@ -1,0 +1,13 @@
+<div class="row"> <!-- space between text, nice styling - and if it's a smaller screen - this text doesn't break horizontally-->
+  <div class="col-xs-10"> <!-- 10/12 sections of the page -->
+    <app-shopping-edit></app-shopping-edit>
+    <hr>
+    <ul class="list-group">
+      <a class="list-group-item"
+         style="cursor: pointer"
+         *ngFor="let ingredient of ingredients"> <!-- acts as a button -->
+        {{ingredient.name}}: {{ingredient.amount}}
+      </a>
+    </ul>
+  </div>
+</div>
