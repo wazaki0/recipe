@@ -1,26 +1,28 @@
 <nav class="navbar navbar-default"> <!-- bootstrap class - which give access to default bootstrap header -->
   <div class="container-fluid"> <!-- a view container -->
     <div class="navbar-header">
-      <a href="#" class="navbar-brand">Tasty and Delicious</a> <!-- a clickable header from angular + text style -->
+      <a routerLinkActive="active" routerLink="" class="navbar-brand">Tasty and Delicious</a> <!-- a clickable header from angular + text style -->
     </div>
 
     <div class="collapse navbar-collapse"> <!-- a collapse works to show text, hide the one above or below - here used for access to nice styling for text -->
       <ul class="nav navbar-nav"> <!-- ul class used to display unordered list - navbar-nav's list would sit next to each other -->
-        <li><a href="#" (click)="onSelect('recipe')">Recipes</a></li> <!-- subheader to each section of page (the a is a hyperlink reference
-         - its another way to get a click from text - that's why its link is "#" - it could be anything
-         using (click) as an event - I then create that specific component (in this case recipe component) -->
-
-        <li><a href="#" (click)="onSelect('shopping')">Shopping list</a></li>
+<!--        <li><a href="#" (click)="onSelect('recipe')">Recipes</a></li> &lt;!&ndash; subheader to each section of page -->
+<!--        (the a is a hyperlink reference-->
+<!--         - its another way to get a click from text - that's why its link is "#" - it could be anything-->
+<!--         using (click) as an event - I then create that specific component (in this case recipe component) &ndash;&gt;-->
+        <li routerLinkActive="active"><a routerLink="/recipes">Recipes</a></li>
+        <!-- uses routerLink to switch to component on click + routerLinkActive activates the css styles when clicked -->
+<!--        <li><a routerLink="/shopping-list">Shopping list</a></li>-->
       </ul>
       <ul class="nav navbar-nav navbar-right"> <!-- same thing positioned into the right, would be used with directive - when for example on recipe page to store data -->
         <li class="dropdown"
             appDropdown> <!-- nice dropdown feature, uses our created directive dropdown - which listens to click when to dropdown -->
-          <a href="#" class="dropdown-toggle"
+          <a class="dropdown-toggle"
              role="button">Manage Data <span class="caret"></span> <!-- clickable bootstrap dropdown, with arrow (from span) -->
           </a>
             <ul class="dropdown-menu"> <!-- once dropdown feature clicked here's whats inside -->
-              <li><a href="#">Save</a></li>
-              <li><a href="#">Refresh</a></li>
+              <li><a style="cursor: pointer;">Save</a></li>
+              <li><a style="cursor: pointer;">Refresh</a></li>
             </ul>
         </li>
       </ul>

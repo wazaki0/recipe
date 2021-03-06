@@ -12,6 +12,8 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
 import {DropdownDirective} from './shared/dropdown.directive';
 import {YouTubePlayerModule} from '@angular/youtube-player';
 import {VideoModule} from './video/video.module';
+import { HomeComponent } from './home/home.component';
+import {AppRoutingModule} from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -23,12 +25,14 @@ import {VideoModule} from './video/video.module';
     RecipeItemComponent,
     RecipeSpecificComponent,
     ShoppingEditComponent,
-    DropdownDirective
+    DropdownDirective,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     YouTubePlayerModule,
-    VideoModule
+    VideoModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

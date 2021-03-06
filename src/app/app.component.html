@@ -1,9 +1,10 @@
-<app-header (menuClicked)="navigate($event)"></app-header>
+<app-header></app-header>
 <div class="container">
   <div class="row">
-    <div class="col-md-16">
-      <app-recipes *ngIf="menuClicked === 'recipe'"></app-recipes>
-      <app-shopping-list *ngIf="menuClicked === 'shopping'"></app-shopping-list>
-    </div>
+
+<!--      <app-recipes *ngIf="menuClicked === 'recipe'"></app-recipes>-->
+<!--      <app-shopping-list *ngIf="menuClicked === 'shopping'"></app-shopping-list>-->
+      <router-outlet></router-outlet>
+
   </div>
 </div>

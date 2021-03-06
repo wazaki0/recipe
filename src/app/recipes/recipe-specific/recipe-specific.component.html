@@ -4,7 +4,7 @@
 <!--      src="{{recipe.imagePath}}"-->
 <!--      alt=""-->
 <!--      class="img-responsive" style="max-height: 300px">-->
-    <app-video></app-video>
+    <app-video [videoUrl]="recipe.videoPath"></app-video> <!-- uses the videourl and method to provide videoID from youtube -->
   </div>
 </div>
 <div class="row">
@@ -21,9 +21,8 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a href="#">Add to Shopping</a> <!-- Not needed for MY PROJECT  -->
-          <a href="#">Edit Recipe</a>
-          <a href="#">Delete Recipe</a>
+          <a style="cursor: pointer;">Edit Recipe</a>
+          <a style="cursor: pointer;">Delete Recipe</a>
         </li>
       </ul>
     </div>
@@ -39,11 +38,44 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
+    <h5>
+      Ingredients:
+    </h5>
     <ul class="list-group">
       <li class="list-group-item"
       *ngFor="let ingredient of recipe.ingredients"> <!-- recipe is installed through input -->
         {{ingredient.name}}: {{ingredient.amount}} <!-- displays ingredient and amount -->
       </li>
     </ul>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <b>Region of Recipe:  </b>
+    <p>
+      {{recipe.region}}
+    </p>
+    <br>
+    <b>
+      Method of Cooking:
+    </b>
+    <p>
+      {{recipe.methodOfCooking}}
+    </p>
+    <br>
+    <b>
+      Type of Food:
+    </b>
+    <p>
+      {{recipe.typeOfFood}}
+    </p>
+    <br>
+    <b>
+      Cooking Time in Minutes:
+    </b>
+    <p>
+      {{recipe.cookingTime}}
+    </p>
   </div>
 </div>

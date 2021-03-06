@@ -15,7 +15,7 @@ export class RecipeService{
         new Ingredient('Chicken Breast 300g', 1),
         new Ingredient('Chicken wings', 2),
         new Ingredient('Rice in g', 500)
-      ])
+      ], 'Vietnamese', 'Snack', 'Frying', 80)
   ];
 
   getRecipes(): Recipe[]{
