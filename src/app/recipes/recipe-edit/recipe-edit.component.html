@@ -1,0 +1,133 @@
+<div class="row"> <!-- for mobiles - where it can cut to another row -->
+  <div class="col-xs-12"> <!-- xs allows scalable from mobile phones to larger (12 is full width) -->
+    <form>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-success"> <!-- btn success green, type submit to submit info -->
+          Save
+          </button>
+          <button type="button" class="btn btn-danger">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <div class="row"> <!-- name of recipe -->
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text"
+                   id="name"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- image url -->
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="imagePath">Image URL</label>
+            <input type="text"
+                   id="imagePath"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- image preview -->
+        <div class="col-xs-12">
+          <img src="" class="img-responsive"> <!-- "img responsive" so it scales to how we want -->
+        </div>
+      </div>
+
+      <div class="row"> <!-- Youtube video url -->
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="youtubeVideoUrl">YouTube Video URL</label>
+            <input type="text" id="youtubeVideoUrl" class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <!-- video preview?? -->
+
+      <div class="row"> <!-- Description -->
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea type="text"
+                      id="description"
+                      class="form-control"
+                      rows="6">
+            </textarea> <!-- enough area for writing description about recipe -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Region -->
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="region">Region</label>
+            <input type="text"
+                   id="region"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Type of Food -->
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="typeOfFood">Type of Food</label>
+            <input type="text"
+                   id="typeOfFood"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Method of Cooking -->
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="methodOfCooking">Method of Cooking</label>
+            <input type="text"
+                   id="methodOfCooking"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Cooking Time -->
+        <div class="col-xs-12">
+          <label for="cookingTime">Cooking Time in Minutes</label>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <input type="number"
+                   id="cookingTime"
+                   class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div class="row"> <!-- Ingredients -->
+        <div class="col-xs-12">
+          <label>Ingredients</label>
+          <div class="row">
+            <div class="col-xs-8"><!-- Ingredient name -->
+              <input type="text" class="form-control">
+            </div>
+            <div class="col-xs-2"> <!-- Ingredient amount -->
+              <input type="number" class="form-control">
+            </div>
+            <div class="col-xs-2"> <!-- delete an ingredient -->
+              <button class="btn btn-danger">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
