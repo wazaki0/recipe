@@ -1,13 +1,15 @@
 <div class="row"> <!-- for mobiles - where it can cut to another row -->
   <div class="col-xs-12"> <!-- xs allows scalable from mobile phones to larger (12 is full width) -->
-    <form>
+    <form (ngSubmit)="onSubmit()" [formGroup]="recipeForm"> <!-- data binding to formGroup - based on our initForm() -->
 
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success"> <!-- btn success green, type submit to submit info -->
-          Save
+          <button
+            [disabled]="!recipeForm.valid"
+            class="btn btn-success" type="submit"> <!-- btn success green, type submit to submit info -->
+            Save
           </button>
-          <button type="button" class="btn btn-danger">
+          <button class="btn btn-danger" type="button">
             Cancel
           </button>
         </div>
@@ -17,9 +19,10 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text"
+            <input class="form-control"
+                   formControlName="name"
                    id="name"
-                   class="form-control">
+                   type="text"> <!-- form-control (variable that will be edited), formControlName - how to reference -->
           </div>
         </div>
       </div>
@@ -27,25 +30,29 @@
       <div class="row"> <!-- image url -->
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="imagePath">Image URL</label>
-            <input type="text"
-                   id="imagePath"
-                   class="form-control">
+            <label for="imageUrl">Image URL</label>
+            <input class="form-control"
+                   formControlName="imageUrl"
+                   id="imageUrl"
+                   type="text">
           </div>
         </div>
       </div>
 
       <div class="row"> <!-- image preview -->
         <div class="col-xs-12">
-          <img src="" class="img-responsive"> <!-- "img responsive" so it scales to how we want -->
+          <img class="img-responsive" src=""> <!-- "img responsive" so it scales to how we want -->
         </div>
       </div>
 
       <div class="row"> <!-- Youtube video url -->
         <div class="col-xs-12">
           <div class="form-group">
-            <label for="youtubeVideoUrl">YouTube Video URL</label>
-            <input type="text" id="youtubeVideoUrl" class="form-control">
+            <label for="youtubeUrl">YouTube Video URL</label>
+            <input class="form-control"
+                   formControlName="youtubeUrl"
+                   id="youtubeUrl"
+                   type="text">
           </div>
         </div>
       </div>
@@ -56,10 +63,11 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea type="text"
+            <textarea class="form-control"
+                      formControlName="description"
                       id="description"
-                      class="form-control"
-                      rows="6">
+                      rows="6"
+                      type="text">
             </textarea> <!-- enough area for writing description about recipe -->
           </div>
         </div>
@@ -69,9 +77,10 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="region">Region</label>
-            <input type="text"
+            <input class="form-control"
+                   formControlName="region"
                    id="region"
-                   class="form-control">
+                   type="text">
           </div>
         </div>
       </div>
@@ -80,9 +89,10 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="typeOfFood">Type of Food</label>
-            <input type="text"
+            <input class="form-control"
+                   formControlName="typeOfFood"
                    id="typeOfFood"
-                   class="form-control">
+                   type="text">
           </div>
         </div>
       </div>
@@ -91,9 +101,10 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="methodOfCooking">Method of Cooking</label>
-            <input type="text"
+            <input class="form-control"
+                   formControlName="methodOfCooking"
                    id="methodOfCooking"
-                   class="form-control">
+                   type="text">
           </div>
         </div>
       </div>
@@ -104,27 +115,44 @@
         </div>
         <div class="col-xs-2">
           <div class="form-group">
-            <input type="number"
+            <input class="form-control"
+                   formControlName="cookingTime"
                    id="cookingTime"
-                   class="form-control">
+                   type="number">
           </div>
         </div>
       </div>
 
       <div class="row"> <!-- Ingredients -->
-        <div class="col-xs-12">
+        <div class="col-xs-12" formArrayName="ingredients">
           <label>Ingredients</label>
-          <div class="row">
+          <div
+            *ngFor="let ingredientCtrl of controls; let i = index"
+            [formGroupName]="i"
+            class="row"
+            style="margin-top: 8px;"> <!-- for each ingredient of ingredients -->
             <div class="col-xs-8"><!-- Ingredient name -->
-              <input type="text" class="form-control">
+              <input class="form-control" formControlName="ingredient" type="text">
             </div>
             <div class="col-xs-2"> <!-- Ingredient amount -->
-              <input type="number" class="form-control">
+              <input class="form-control" formControlName="amount" type="number">
             </div>
             <div class="col-xs-2"> <!-- delete an ingredient -->
               <button class="btn btn-danger">X</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <button
+            (click)="onAddIngredients()"
+            class="btn btn-success"
+            style="margin-top: 5px; margin-bottom: 5px;"
+            type="button">
+            Add Ingredient
+          </button>
         </div>
       </div>
 

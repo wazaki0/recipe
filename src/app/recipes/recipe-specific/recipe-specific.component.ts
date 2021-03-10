@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../recipe.model';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {RecipeService} from '../recipe.service';
@@ -25,8 +25,15 @@ export class RecipeSpecificComponent implements OnInit {
     );
   }
 
-  onEditRecipe(): void{
+  onEditRecipe(): void {
     this.router.navigate(['edit'], {relativeTo: this.route});
+  }
+
+  onEmptyString(detail: string): boolean {
+    if (detail === '') {
+      return true;
+    }
+    return false;
   }
 
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {FormControl, FormGroup} from '@angular/forms';
+import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RecipeService} from '../recipe.service';
 
 @Component({
@@ -13,7 +13,12 @@ export class RecipeEditComponent implements OnInit {
   editMode = false;
   recipeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private recipeService: RecipeService) { }
+  constructor(private route: ActivatedRoute, private recipeService: RecipeService) {
+  }
+
+  get controls(): AbstractControl[] { // a getter!
+    return (this.recipeForm.get('ingredients') as FormArray).controls; // return
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -25,38 +30,80 @@ export class RecipeEditComponent implements OnInit {
     );
   }
 
-  private initForm(): void {
-    let name = '';
-    let imageUrl = '';
-    let youtubeUrl = '';
-    let description = '';
-    let region = '';
-    let typeOfFood = '';
-    let methodOfCooking = '';
-    let cookingTime = 0;
+  onSubmit(): void {
 
-    if (!this.editMode){ // if the e
+    if (this.editMode) {
+      this.recipeService.updateRecipe(this.recipeId, this.recipeForm.value);
+    } else {
+      this.recipeService.addRecipe(this.recipeForm.value);
+    }
+  }
+
+  onAddIngredients(): void {
+    (this.recipeForm.get('ingredients') as FormArray).push(
+      new FormGroup({
+        ingredient: new FormControl(null, Validators.required),
+        amount: new FormControl(null, Validators.compose([
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/) // only even numbers
+        ]))
+      })
+    );
+  }
+
+  private initForm(): void {
+    let recipeName = '';
+    let recipeImageUrl = '';
+    let recipeYoutubeUrl = '';
+    let recipeDescription = '';
+    let recipeRegion = '';
+    let recipeTypeOfFood = '';
+    let recipeMethodOfCooking = '';
+    let recipeCookingTime = 0;
+    const recipeIngredients = new FormArray([]);
+
+    if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
       const recipe = this.recipeService.getRecipe(this.recipeId);
-      name = recipe.name;
-      imageUrl = recipe.imagePath;
-      youtubeUrl = recipe.videoPath;
-      description = recipe.description;
-      region = recipe.region;
-      typeOfFood = recipe.typeOfFood;
-      methodOfCooking = recipe.methodOfCooking;
-      cookingTime = recipe.cookingTime;
+      recipeName = recipe.name;
+      recipeImageUrl = recipe.imagePath;
+      recipeYoutubeUrl = recipe.videoPath;
+      recipeDescription = recipe.description;
+      recipeRegion = recipe.region;
+      recipeTypeOfFood = recipe.typeOfFood;
+      recipeMethodOfCooking = recipe.methodOfCooking;
+      recipeCookingTime = recipe.cookingTime;
+      recipe.ingredients.forEach(ingredient => {
+        recipeIngredients.push(new FormGroup({
+          ingredient: new FormControl(ingredient.name, Validators.required),
+          amount: new FormControl(
+            ingredient.amount,
+            Validators.compose([
+              Validators.required,
+              Validators.pattern(/^[1-9]+[0-9]*$/) // only even numbers
+            ]))
+        }));
+      });
+
+      /* for (let ingredient of recipe.ingredients){ // for each ingredient in loaded recipe
+         recipeIngredients.push(new FormGroup({
+           ingredient: new FormControl(ingredient.name),
+           amount: new FormControl(ingredient.amount)
+           })
+         );
+       }*/
     }
 
 
-    this.recipeForm = new FormGroup ({
-      name: new FormControl(name),
-      imageUrl: new FormControl(imageUrl),
-      youtubeUrl: new FormControl(youtubeUrl),
-      description: new FormControl(description),
-      region: new FormControl(region),
-      typeOfFood: new FormControl(typeOfFood),
-      methodOfCooking: new FormControl(methodOfCooking),
-      cookingTime: new FormControl(cookingTime)
+    this.recipeForm = new FormGroup({ // assign what values the form will have
+      name: new FormControl(recipeName, Validators.required), // recipeName initialized, validator - rules before submitting
+      imageUrl: new FormControl(recipeImageUrl, Validators.required),
+      youtubeUrl: new FormControl(recipeYoutubeUrl, Validators.required),
+      description: new FormControl(recipeDescription, Validators.required),
+      region: new FormControl(recipeRegion),
+      typeOfFood: new FormControl(recipeTypeOfFood),
+      methodOfCooking: new FormControl(recipeMethodOfCooking),
+      cookingTime: new FormControl(recipeCookingTime, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+      ingredients: recipeIngredients
     });
   }
 }

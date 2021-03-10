@@ -1,0 +1,7 @@
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid red;
+  /* ng-invalid: if a validator not reached (required or not a even number etc., red borderline helps
+    user understand to fix input)
+     nr-touched*/
+}

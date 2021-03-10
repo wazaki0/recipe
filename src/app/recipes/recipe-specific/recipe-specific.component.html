@@ -1,10 +1,11 @@
 <div class="row">
   <div class="col-xs-12"> <!-- column using full available width-->
-<!--    <img-->
-<!--      src="{{recipe.imagePath}}"-->
-<!--      alt=""-->
-<!--      class="img-responsive" style="max-height: 300px">-->
-    <app-video [videoUrl]="recipe.videoPath"></app-video> <!-- uses the videourl and method to provide videoID from youtube -->
+    <!--    <img-->
+    <!--      src="{{recipe.imagePath}}"-->
+    <!--      alt=""-->
+    <!--      class="img-responsive" style="max-height: 300px">-->
+    <app-video [videoUrl]="recipe.videoPath"></app-video>
+    <!-- uses the videourl and method to provide videoID from youtube -->
   </div>
 </div>
 <div class="row">
@@ -14,14 +15,14 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <div class="btn-group"
-         appDropdown>
-      <button type="button" class="btn btn-primary dropdown-toggle"><!-- button and dropdown feature  -->
+    <div appDropdown
+         class="btn-group">
+      <button class="btn btn-primary dropdown-toggle" type="button"><!-- button and dropdown feature  -->
         Manage recipe <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a style="cursor: pointer;" (click)="onEditRecipe()">Edit Recipe</a>
+          <a (click)="onEditRecipe()" style="cursor: pointer;">Edit Recipe</a>
           <a style="cursor: pointer;">Delete Recipe</a>
         </li>
       </ul>
@@ -42,9 +43,10 @@
       Ingredients:
     </h5>
     <ul class="list-group">
-      <li class="list-group-item"
-      *ngFor="let ingredient of recipe.ingredients"> <!-- recipe is installed through input -->
-        {{ingredient.name}}: {{ingredient.amount}} <!-- displays ingredient and amount -->
+      <li *ngFor="let ingredient of recipe.ingredients"
+          class="list-group-item"
+          style="margin-top: 5px;"> <!-- recipe is installed through input, margin for better look -->
+        {{ingredient.name}} {{ingredient.amount}} <!-- displays ingredient and amount -->
       </li>
     </ul>
   </div>
@@ -52,25 +54,34 @@
 <hr>
 <div class="row">
   <div class="col-xs-12">
-    <b>Region of Recipe:  </b>
-    <p>
-      {{recipe.region}}
-    </p>
+    <div *ngIf="recipe.region"> <!-- true if string is filled in and not just '' -->
+      <b>Region of Recipe: </b>
+      <p>
+        {{recipe.region}}
+      </p>
+    </div>
     <br>
-    <b>
-      Method of Cooking:
-    </b>
-    <p>
-      {{recipe.methodOfCooking}}
-    </p>
+
+    <div *ngIf="recipe.methodOfCooking">
+      <b>
+        Method of Cooking:
+      </b>
+      <p>
+        {{recipe.methodOfCooking}}
+      </p>
+    </div>
     <br>
-    <b>
-      Type of Food:
-    </b>
-    <p>
-      {{recipe.typeOfFood}}
-    </p>
+
+    <div *ngIf="recipe.typeOfFood">
+      <b>
+        Type of Food:
+      </b>
+      <p>
+        {{recipe.typeOfFood}}
+      </p>
+    </div>
     <br>
+
     <b>
       Cooking Time in Minutes:
     </b>
