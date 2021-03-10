@@ -1,10 +1,10 @@
-import { EventEmitter } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.module';
 
 import {Recipe} from './recipe.model';
 
 export class RecipeService{
-  recipeSelected = new EventEmitter<Recipe>();
+  /* recipeSelected = new EventEmitter<Recipe>(); replaced by routing and
+     subject - same function as eventemitter, but more efficient*/
 
   private recipes: Recipe[] = [ // can directly access recipe from outside
     new Recipe('TestRecipe',
@@ -18,10 +18,11 @@ export class RecipeService{
       ], 'Vietnamese', 'Snack', 'Frying', 80)
   ];
 
+  getRecipe(index: number): Recipe{
+    return this.recipes[index]; // based on id - index of array - gets that recipe
+  }
+
   getRecipes(): Recipe[]{
     return this.recipes.slice(); // slice creates a direct copy - which prevents the access from outside - only view
   }
-  // setRecipes(){
-  //
-  // }
 }

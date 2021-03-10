@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -6,9 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  menuClicked: string;
 
-  navigate(text: string): void{
-    this.menuClicked = text;
-  }
+  public constructor(titleService: Title) { }
+
+  // navigate(text: string): void{
+  //   this.menuClicked = text;
+  // }
+
+
+  // public setTitle( newTitle: string) {
+  //   this.titleService.setTitle( newTitle );
+  // }
+
 }

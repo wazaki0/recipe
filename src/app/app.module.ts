@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -14,10 +14,13 @@ import {YouTubePlayerModule} from '@angular/youtube-player';
 import {VideoModule} from './video/video.module';
 import { HomeComponent } from './home/home.component';
 import {AppRoutingModule} from './app-routing.module';
+import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent, // declare components so angular sees them
     HeaderComponent,
     ShoppingListComponent,
     RecipesComponent,
@@ -26,15 +29,18 @@ import {AppRoutingModule} from './app-routing.module';
     RecipeSpecificComponent,
     ShoppingEditComponent,
     DropdownDirective,
-    HomeComponent
+    HomeComponent,
+    RecipeStartComponent,
+    RecipeEditComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule, // declare modules
     YouTubePlayerModule,
     VideoModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [Title], // title
+  bootstrap: [AppComponent] // what starts application
 })
 export class AppModule { }

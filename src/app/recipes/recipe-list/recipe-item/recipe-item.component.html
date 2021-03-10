@@ -1,9 +1,14 @@
 <a style="cursor: pointer;"
-  class="list-group-item clearfix"
-   (click)="onImageClicked()">
+   class="list-group-item clearfix"
+   routerLinkActive="active"
+   [routerLink]="[recipeIndex]"> <!-- blue container "active": routerLinkActive once activated link change,
+   routerLink: changes the link to this recipe's index - to load that recipe-->
+
+<!--   (click)="onImageClicked()"> - this was used before routing-->
   <!-- make it look like a list group item from bootstrap
    (click) starts method onImageClicked, which emits current recipe -
    to display at  recipe-specific - that specific recipe-->
+
   <div class="pull-left"> <!-- put on left side of the list -->
     <h4 class="list-group-item-heading"> <!-- heading for list (what recipe will contain) -->
       {{recipe.name}}
