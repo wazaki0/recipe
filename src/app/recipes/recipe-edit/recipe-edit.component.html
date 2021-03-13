@@ -9,7 +9,9 @@
             class="btn btn-success" type="submit"> <!-- btn success green, type submit to submit info -->
             Save
           </button>
-          <button class="btn btn-danger" type="button">
+          <button
+            (click)="onCancelRecipe()"
+            class="btn btn-danger" type="button">
             Cancel
           </button>
         </div>
@@ -31,7 +33,8 @@
         <div class="col-xs-12">
           <div class="form-group">
             <label for="imageUrl">Image URL</label>
-            <input class="form-control"
+            <input #imageUrl
+                   class="form-control"
                    formControlName="imageUrl"
                    id="imageUrl"
                    type="text">
@@ -41,7 +44,7 @@
 
       <div class="row"> <!-- image preview -->
         <div class="col-xs-12">
-          <img class="img-responsive" src=""> <!-- "img responsive" so it scales to how we want -->
+          <img [src]="imageUrl.value" class="img-responsive"> <!-- "img responsive" so it scales to how we want -->
         </div>
       </div>
 
@@ -131,14 +134,14 @@
             [formGroupName]="i"
             class="row"
             style="margin-top: 8px;"> <!-- for each ingredient of ingredients -->
-            <div class="col-xs-8"><!-- Ingredient name -->
-              <input class="form-control" formControlName="ingredient" type="text">
+            <div class="col-xs-8"><!-- Ingredient ingredient -->
+              <input class="form-control" formControlName="name" type="text">
             </div>
             <div class="col-xs-2"> <!-- Ingredient amount -->
               <input class="form-control" formControlName="amount" type="number">
             </div>
             <div class="col-xs-2"> <!-- delete an ingredient -->
-              <button class="btn btn-danger">X</button>
+              <button (click)="onDeleteIngredient(i)" class="btn btn-danger">X</button>
             </div>
           </div>
         </div>

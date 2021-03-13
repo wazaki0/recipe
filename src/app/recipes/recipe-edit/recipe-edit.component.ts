@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RecipeService} from '../recipe.service';
 
@@ -13,7 +13,9 @@ export class RecipeEditComponent implements OnInit {
   editMode = false;
   recipeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private recipeService: RecipeService) {
+  constructor(private route: ActivatedRoute,
+              private recipeService: RecipeService,
+              private router: Router) {
   }
 
   get controls(): AbstractControl[] { // a getter!
@@ -21,7 +23,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
+    this.route.params.subscribe( // every time routing changes
       (params: Params) => {
         this.recipeId = params.id; // the id of the website - representing recipe
         this.editMode = params.id != null; // if id existed, edit mode - otherwise create mode
@@ -30,19 +32,20 @@ export class RecipeEditComponent implements OnInit {
     );
   }
 
-  onSubmit(): void {
+  onSubmit(): void { // when submitting the filled in recipe to recipe-service (to update the recipes array)
 
     if (this.editMode) {
       this.recipeService.updateRecipe(this.recipeId, this.recipeForm.value);
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
-  onAddIngredients(): void {
+  onAddIngredients(): void { // while adding ingredients, adds an ingredient object to ingredients array
     (this.recipeForm.get('ingredients') as FormArray).push(
       new FormGroup({
-        ingredient: new FormControl(null, Validators.required),
+        name: new FormControl(null, Validators.required),
         amount: new FormControl(null, Validators.compose([
           Validators.required,
           Validators.pattern(/^[1-9]+[0-9]*$/) // only even numbers
@@ -51,7 +54,15 @@ export class RecipeEditComponent implements OnInit {
     );
   }
 
-  private initForm(): void {
+  onCancelRecipe(): void { // when cancelling the changes for a recipe
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  onDeleteIngredient(index: number): void {
+    (this.recipeForm.get('ingredients') as FormArray).removeAt(index); // delete recipe at that index
+  }
+
+  private initForm(): void { // the initialization of a recipe form
     let recipeName = '';
     let recipeImageUrl = '';
     let recipeYoutubeUrl = '';
@@ -65,32 +76,26 @@ export class RecipeEditComponent implements OnInit {
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
       const recipe = this.recipeService.getRecipe(this.recipeId);
       recipeName = recipe.name;
-      recipeImageUrl = recipe.imagePath;
-      recipeYoutubeUrl = recipe.videoPath;
+      recipeImageUrl = recipe.imageUrl;
+      recipeYoutubeUrl = recipe.youtubeUrl;
       recipeDescription = recipe.description;
       recipeRegion = recipe.region;
       recipeTypeOfFood = recipe.typeOfFood;
       recipeMethodOfCooking = recipe.methodOfCooking;
       recipeCookingTime = recipe.cookingTime;
-      recipe.ingredients.forEach(ingredient => {
-        recipeIngredients.push(new FormGroup({
-          ingredient: new FormControl(ingredient.name, Validators.required),
-          amount: new FormControl(
-            ingredient.amount,
-            Validators.compose([
-              Validators.required,
-              Validators.pattern(/^[1-9]+[0-9]*$/) // only even numbers
-            ]))
-        }));
-      });
-
-      /* for (let ingredient of recipe.ingredients){ // for each ingredient in loaded recipe
-         recipeIngredients.push(new FormGroup({
-           ingredient: new FormControl(ingredient.name),
-           amount: new FormControl(ingredient.amount)
-           })
-         );
-       }*/
+      if (recipe.ingredients) { // if empty avoids error of looking through it
+        recipe.ingredients.forEach(ingredient => {
+          recipeIngredients.push(new FormGroup({
+            name: new FormControl(ingredient.name, Validators.required),
+            amount: new FormControl(
+              ingredient.amount,
+              Validators.compose([
+                Validators.required,
+                Validators.pattern(/^[1-9]+[0-9]*$/) // only even numbers
+              ]))
+          }));
+        });
+      }
     }
 
 

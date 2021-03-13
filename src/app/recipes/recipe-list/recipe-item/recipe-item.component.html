@@ -1,10 +1,10 @@
-<a style="cursor: pointer;"
+<a [routerLink]="[recipeIndex]"
    class="list-group-item clearfix"
    routerLinkActive="active"
-   [routerLink]="[recipeIndex]"> <!-- blue container "active": routerLinkActive once activated link change,
+   style="cursor: pointer;"> <!-- blue container "active": routerLinkActive once activated link change,
    routerLink: changes the link to this recipe's index - to load that recipe-->
 
-<!--   (click)="onImageClicked()"> - this was used before routing-->
+  <!--   (click)="onImageClicked()"> - this was used before routing-->
   <!-- make it look like a list group item from bootstrap
    (click) starts method onImageClicked, which emits current recipe -
    to display at  recipe-specific - that specific recipe-->
@@ -19,9 +19,9 @@
   </div>
   <span class="pull-right"> <!-- imagepath for recipe -->
       <img
-            src="{{recipe.imagePath}}"
-            alt="{{recipe.imagePath}}"
-            class="img-responsive"
-            style="max-height: 80px;">
+        alt="{{recipe.imageUrl}}"
+        class="img-responsive"
+        src="{{recipe.imageUrl}}"
+        style="max-height: 80px;">
   </span>
 </a>

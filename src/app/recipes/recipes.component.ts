@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import {RecipeService} from './recipe.service'; // importing class Recipe
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.css'],
-  providers: [RecipeService] // allows use in child components
+  styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
   // recipeItemClicked: Recipe; - not needed thanks to routing
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
     /*this.recipeService.recipeSelected.

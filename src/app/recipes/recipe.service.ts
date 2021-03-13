@@ -17,6 +17,15 @@ export class RecipeService {
         new Ingredient('Chicken Breast 300g', 1),
         new Ingredient('Chicken wings', 2),
         new Ingredient('Rice in g', 500)
+      ], '', 'Snack', 'Frying', 80),
+    new Recipe('Beans',
+      'very juicy - maybe crispy?',
+      'https://cleanfoodcrush.com/wp-content/uploads/2019/01/Super-Easy-Chicken-Stir-Fry-Recipe-by-CFC.jpg',
+      'https://www.youtube.com/watch?v=qyYHWkVWQ4o&ab_channel=KillerBean',
+      [
+        new Ingredient('Chicken Breast 300g', 1),
+        new Ingredient('Chicken wings', 2),
+        new Ingredient('Rice in g', 500)
       ], '', 'Snack', 'Frying', 80)
   ];
 
@@ -30,9 +39,16 @@ export class RecipeService {
 
   addRecipe(recipe: Recipe): void {
     this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
   }
 
   updateRecipe(index: number, newRecipe: Recipe): void {
     this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
   }
 }
