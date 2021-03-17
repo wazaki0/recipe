@@ -1,5 +1,3 @@
-import {Ingredient} from '../shared/ingredient.module';
-
 import {Recipe} from './recipe.model';
 import {Subject} from 'rxjs';
 
@@ -8,7 +6,7 @@ export class RecipeService {
      subject - same function as eventemitter, but more efficient*/
   recipesChanged = new Subject<Recipe[]>();
 
-  private recipes: Recipe[] = [ // can directly access recipe from outside
+  /*private recipes: Recipe[] = [ // can directly access recipe from outside
     new Recipe('TestRecipe',
       'very juicy - maybe crispy?',
       'https://cleanfoodcrush.com/wp-content/uploads/2019/01/Super-Easy-Chicken-Stir-Fry-Recipe-by-CFC.jpg',
@@ -27,7 +25,8 @@ export class RecipeService {
         new Ingredient('Chicken wings', 2),
         new Ingredient('Rice in g', 500)
       ], '', 'Snack', 'Frying', 80)
-  ];
+  ];*/ // Already saved onto database!
+  private recipes: Recipe[] = [];
 
   getRecipe(index: number): Recipe {
     return this.recipes[index]; // based on id - index of array - gets that recipe
@@ -39,7 +38,7 @@ export class RecipeService {
 
   addRecipe(recipe: Recipe): void {
     this.recipes.push(recipe);
-    this.recipesChanged.next(this.recipes.slice());
+    this.recipesChanged.next(this.recipes.slice()); // indicates change of recipe array
   }
 
   updateRecipe(index: number, newRecipe: Recipe): void {
@@ -47,8 +46,13 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  deleteRecipe(index: number) {
+  deleteRecipe(index: number): void {
     this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
+  }
+
+  overwriteRecipes(recipes: Recipe[]): void { // sets all recipes wanted visible to our array of recipes visible
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice()); // indicates that there was a change of recipe array
   }
 }

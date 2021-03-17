@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {Title} from '@angular/platform-browser';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +7,8 @@ import {Title} from '@angular/platform-browser';
 })
 export class AppComponent {
 
-  public constructor(titleService: Title) { }
+  public constructor() {
+  }
 
   // navigate(text: string): void{
   //   this.menuClicked = text;

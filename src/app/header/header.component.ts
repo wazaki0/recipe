@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {DataStorageService} from '../shared/data-storage.service';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,19 @@ export class HeaderComponent implements OnInit {
   //   this.menuClicked.emit(text);
   // }
 
-  constructor() { }
+  constructor(private dataStorageService: DataStorageService) {
+  }
 
   ngOnInit(): void {
+  }
+
+  onSaveData(): void {
+    this.dataStorageService.storeRecipes();
+  }
+
+  onFetchData(): void {
+    this.dataStorageService.fetchRecipes().subscribe();
+    //subscribe needed to send http request, though we don't need something out of it as tap overwrites recipes already
   }
 
 }
