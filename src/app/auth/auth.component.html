@@ -1,21 +1,37 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
-    <form>
-      <div class="form-group"> <!-- email - also username -->
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="authForm">
+
+      <div class="form-group"> <!-- username = email -->
         <label for="email">E-Mail</label>
-        <input class="form-control" id="email" type="email">
+        <input class="form-control" formControlName="email" id="email" type="email">
       </div>
+
+      <div *ngIf="!isLoginPage">
+        <label for="username">Online Username</label>
+        <input class="form-control" formControlName="username" id="username" type="text">
+      </div>
+
       <div class="form-group"> <!-- password -->
-        <label for="password">password</label>
-        <input class="form-control" id="password" type="email">
+        <label for="password">Password</label>
+        <input class="form-control" formControlName="password" id="password" type="password">
       </div>
+
       <div>
-        <button class="btn btn-primary" type="submit">Back to Login</button>
+        <button class="btn btn-primary"
+                type="submit">{{ isLoginPage ? 'Confirm Login' : 'Confirm Signup'}}</button>
+        <!-- if loginmode or signup mode -->
       </div>
       <br>
       <div>
-        <button class="btn btn-primary" type="submit">Sign Up</button>
+        <button (click)="onSwitchmode()"
+                class="btn btn-primary"
+                type="button">{{ isLoginPage ? 'Signup' : 'Login'}}
+        </button> <!-- if loginmode or signup mode -->
       </div>
+
     </form>
+
   </div>
 </div>
