@@ -11,6 +11,9 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "types": [
+      "gapi.auth2"
+    ],
     "module": "es2020",
     "lib": [
       "es2018",

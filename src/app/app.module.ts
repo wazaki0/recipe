@@ -20,6 +20,8 @@ import {RecipeService} from './recipes/recipe.service';
 import {DataStorageService} from './shared/data-storage.service';
 import {RecipesResolverService} from './recipes/recipes-resolver.service';
 import {AuthComponent} from './auth/auth.component';
+import {AuthService} from './auth/auth.service';
+import {LoadingSpinnerComponent} from './shared/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import {AuthComponent} from './auth/auth.component';
     HomeComponent,
     RecipeStartComponent,
     RecipeEditComponent,
-    AuthComponent
+    AuthComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule, // declare modules - angular modules first for visual stimulation
@@ -43,7 +46,7 @@ import {AuthComponent} from './auth/auth.component';
     VideoModule,
     AppRoutingModule,
   ],
-  providers: [RecipeService, DataStorageService, RecipesResolverService], // allows use in child components - meaning all components
+  providers: [RecipeService, DataStorageService, RecipesResolverService, AuthService], // allows use in child components - meaning all components
   bootstrap: [AppComponent] // what starts application
 })
 export class AppModule {

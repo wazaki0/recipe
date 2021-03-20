@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthResponseData, AuthService} from './auth.service';
+import {Observable} from 'rxjs';
+import {Router} from '@angular/router'; // the redirecting of page done in component - where we know what page we are on
 
 @Component({
   selector: 'app-auth',
@@ -8,12 +11,12 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class AuthComponent implements OnInit {
 
-  isLoginPage = true;
-  authForm: FormGroup;
-  // signupForm: FormGroup;
-  // loginForm: FormGroup;
+  isLoginPage = true; // to use restAPI from firebase for signup details, or login details
+  isLoading = false; // to display loading spinner (if true)
+  authForm: FormGroup; // the form for user to input - always email and username for authentication
+  error: string = null; // to get the error string - and display to user
 
-  constructor() {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -22,36 +25,49 @@ export class AuthComponent implements OnInit {
 
   onSwitchmode(): void {
     this.isLoginPage = !this.isLoginPage;
-    this.authForm = null;
-    this.initForm();
+    this.authForm.reset();
   }
 
-  onSubmit(): void {
-    console.log(this.authForm);
+  onSubmit(): void { // submitting input values from login/signup screen
+    if (!this.authForm.valid) { // if not valid - don't send a request
+      return;
+    }
+
+    this.isLoading = true; // loading
+    let authObservable: Observable<AuthResponseData>; // the login observable's information will be stored
+
+    if (!this.isLoginPage) { // signup
+      authObservable = this.authService.signup(this.authForm.value.email, this.authForm.value.password); // store
+    }
+
+    if (this.isLoginPage) {// login
+      authObservable = this.authService.login(this.authForm.value.email, this.authForm.value.password);
+      // store authObservable observable
+    }
+
+    authObservable.subscribe( // get the data from the stored observable
+      resData => { // successful
+        console.log(resData);
+        this.router.navigate(['/recipes']);
+      }, errorMessage => { // error
+        // we won't get the error here, but only the message we throw from auth.service.ts login()
+        this.error = errorMessage;
+      });
+
+    this.isLoading = false;
+    this.authForm.reset();
   }
 
   private initForm(): void {
 
     const email = '';
     const password = '';
-    const username = '';
 
-    if (this.isLoginPage) {
-
-      this.authForm = new FormGroup({
-        email: new FormControl(password, Validators.required),
-        password: new FormControl(email, Validators.required)
-      });
-
-    } else {
-      this.authForm = new FormGroup({
-        email: new FormControl(email, [Validators.required, Validators.email]), // initialize, validator - rules before submitting
-        username: new FormControl(username, Validators.required),
-        password: new FormControl(password, Validators.required),
-      });
-    }
+    this.authForm = new FormGroup({
+      email: new FormControl(password, [Validators.required, Validators.email]),
+      password: new FormControl(email, Validators.required)
+    });
 
 
   }
-
 }

@@ -1,16 +1,19 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
 
-    <form (ngSubmit)="onSubmit()" [formGroup]="authForm">
+    <div *ngIf="error" class="alert alert-danger">
+      <p> {{error}} </p>
+    </div>
+
+    <div *ngIf="isLoading" style="text-align: center">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" *ngIf="!isLoading" [formGroup]="authForm">
 
       <div class="form-group"> <!-- username = email -->
         <label for="email">E-Mail</label>
         <input class="form-control" formControlName="email" id="email" type="email">
-      </div>
-
-      <div *ngIf="!isLoginPage">
-        <label for="username">Online Username</label>
-        <input class="form-control" formControlName="username" id="username" type="text">
       </div>
 
       <div class="form-group"> <!-- password -->
@@ -19,15 +22,15 @@
       </div>
 
       <div>
-        <button class="btn btn-primary"
-                type="submit">{{ isLoginPage ? 'Confirm Login' : 'Confirm Signup'}}</button>
+        <button class="btn btn-success"
+                type="submit">{{ isLoginPage ? 'Login' : 'Signup'}}</button>
         <!-- if loginmode or signup mode -->
       </div>
-      <br>
+      <hr>
       <div>
         <button (click)="onSwitchmode()"
                 class="btn btn-primary"
-                type="button">{{ isLoginPage ? 'Signup' : 'Login'}}
+                type="button">Switch to {{ isLoginPage ? 'Signup' : 'Login'}}
         </button> <!-- if loginmode or signup mode -->
       </div>
 
