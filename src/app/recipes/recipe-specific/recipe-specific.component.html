@@ -19,8 +19,8 @@
       <h3>{{recipe.name}}</h3>
     </div>
   </div>
-  <div *ngIf="currentUser && recipe.userId === currentUser.id" class="row">
-    <div class="col-xs-12">
+  <div class="row">
+    <div *ngIf="currentUser && recipe.userId === currentUser.id" class="col-xs-4">
       <div appDropdown
            class="btn-group">
         <button class="btn btn-primary dropdown-toggle" type="button"><!-- button and dropdown feature  -->
@@ -33,6 +33,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div *ngIf="recipeService.isAdmin() && sourceTable === 'pendingrecipes'" class="col-xs-4">
+      <button (click)="onApprove()" class="btn btn-primary">APPROVE</button>
     </div>
   </div>
   <div class="row">

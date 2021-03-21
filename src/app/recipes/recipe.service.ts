@@ -14,6 +14,8 @@ export class RecipeService {
   recipesChanged = new Subject<RecipeDB[]>();
   currentUser: User;
 
+  adminUsers: string[] = ['9DLNBagz0ehZAgGyK7OXDgmAwsu2', '74UF29bhuqXrQlXvB9HhF42KgqS2', 'WS7KMuZxCzQAFREHgUTSxVfOUOv2'];
+
   // Already saved onto database!
   private recipes: RecipeDB[] = [];
 
@@ -25,6 +27,10 @@ export class RecipeService {
       .subscribe(user => { // when component initialized, subscribe to userAuthenticated change
         this.currentUser = user;
       });
+  }
+
+  isAdmin(): boolean {
+    return this.adminUsers.includes(this.currentUser.id);
   }
 
   async getRecipe(key: string, sourceTable: string = 'recipes'): Promise<RecipeDB> {
@@ -127,4 +133,18 @@ export class RecipeService {
     this.recipes = recipes;
     this.recipesChanged.next(this.recipes.slice()); // indicates that there was a change of recipe array
   }
+
+  approveRecipe(key: string, recipe: Recipe): void {
+    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`, recipe)
+      .subscribe();
+
+    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes/${key}.json`)
+      .pipe(
+        tap(response => {
+          this.fetchRecipes('pendingrecipes').subscribe();
+          this.router.navigate(['/pending']);
+        })
+      ).subscribe();
+  }
+
 }

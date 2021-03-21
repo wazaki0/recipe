@@ -21,7 +21,7 @@ export class RecipeSpecificComponent implements OnInit {
   isLoading = false;
   recipeKey: string; // to identify specific recipe from url (recipes/:id)
 
-  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router,
+  constructor(public recipeService: RecipeService, private route: ActivatedRoute, private router: Router,
               private authService: AuthService) {
 
     this.authService.user
@@ -77,6 +77,10 @@ export class RecipeSpecificComponent implements OnInit {
   }
 
   onDeleteRecipe(): void {
-    this.recipeService.deleteRecipe(this.recipeKey, 'pendingrecipes', this.route);
+    this.recipeService.deleteRecipe(this.recipeKey, this.sourceTable, this.route);
+  }
+
+  onApprove(): void {
+    this.recipeService.approveRecipe(this.recipeKey, this.recipe);
   }
 }
