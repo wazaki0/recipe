@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {User} from './user.module';
+import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 export interface AuthResponseData { // exported so I can use in auth.component.ts
-                                    // the data provided here are listed from firebase signup email restAPI
-                                    // restAPI = https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
+  // the data provided here are listed from firebase signup email restAPI
+  // restAPI = https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
   idToken: string;
   email: string;
   refreshToken: string;
@@ -17,14 +19,17 @@ export interface AuthResponseData { // exported so I can use in auth.component.t
 
 @Injectable()
 export class AuthService {
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
+  private logoutTimer: any;
 
-  constructor(private http: HttpClient) {
+  // BehaviourSubject similar to Subject, but allows getting values even when BehaviourSubject not emitted - useful for getting token status
+
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   signup(email: string, password: string): Observable<AuthResponseData> {
     // Observable will receive the object from firebase with different data - object described using AuthResponseData interface
-    return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBEy-9TD7e-_QRh3cozSKN8kAdu66Rnbt8',
+    return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey,
       {
         email,
         password,
@@ -38,7 +43,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<AuthResponseData> {
-    return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBEy-9TD7e-_QRh3cozSKN8kAdu66Rnbt8',
+    return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
       {
         email,
         password,
@@ -50,6 +55,36 @@ export class AuthService {
         this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
         // tap lets us collect the value without affecting it, so we can subscribe somewhere else
       }));
+  }
+
+  logout(): void {
+    this.user.next(null); // user subject now is null - also emits this for other components to react (who subscribed to user)
+    this.router.navigate(['/auth']); // back to authentication page
+    localStorage.removeItem('userData'); // clear saved login data (onto browser)
+    if (this.logoutTimer) {
+      clearTimeout(this.logoutTimer); // once logged out - no need for a timer to auto-logout user after that token expires
+    }
+    this.logoutTimer = null;
+  }
+
+  autoLogin(): void {
+    const userData: User = JSON.parse(localStorage.getItem('userData')); // if saved onto browser
+    if (!userData) { // if empty - no auto-login feature possible
+      return;
+    }
+
+    if (userData.getToken()) { // null if invalid token (expired or not right token)
+      this.user.next(userData); // if true - forward the loaded user
+      this.autoLogout((userData.getTokenExpiryDate().getTime() - new Date().getTime()) * 1000);
+      // logout after expiry date amount of seconds passed
+    }
+
+  }
+
+  autoLogout(expirationDuration: number): void {
+    this.logoutTimer = setTimeout(() => {
+      this.logout(); // after token expires
+    }, expirationDuration);
   }
 
   private handleError(errorRes: HttpErrorResponse): Observable<AuthResponseData> {
@@ -96,6 +131,10 @@ export class AuthService {
       idToken,
       expirationDate);
     this.user.next(user);
-    // emits the user using subject (similar to eventemitter) - using tap - so we can still subscribe in auth.component
-  }
+    this.autoLogout(expiresIn * 1000); // in seconds when token expires
+    // emits and saves the user using subject (similar to eventemitter) - using tap - so we can still subscribe in auth.component
+    localStorage.setItem('userData', JSON.stringify(user));
+    /* store user information (nicknamed userData) to browser - so when user reloads browser - doesn't have to login again
+    (also uses auto-login). JSON.stringify converts java object into string version of it */
+  };
 }

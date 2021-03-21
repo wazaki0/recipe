@@ -13,14 +13,21 @@
         <!--        (the a is a hyperlink reference-->
         <!--         - its another way to get a click from text - that's why its link is "#" - it could be anything-->
         <!--         using (click) as an event - I then create that specific component (in this case recipe component) &ndash;&gt;-->
-        <li routerLinkActive="active"><a routerLink="/recipes">Recipes</a></li>
+        <li routerLinkActive="active"><a *ngIf="userAuthenticated" routerLink="/recipes">Recipes</a></li>
         <!-- uses routerLink to switch to component on click + routerLinkActive activates the css styles when clicked -->
-        <li routerLinkActive="active"><a routerLink="/auth">Authentication</a></li>
+        <!-- possible when authenticated -->
+        <li routerLinkActive="active"><a *ngIf="!userAuthenticated" routerLink="/auth">Authentication</a></li>
+        <!-- possible when not authenticated -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <!-- same thing positioned into the right, would be used with directive - when for example on recipe page to store data -->
-        <li appDropdown
-            class="dropdown">
+        <li (click)="onLogout()" *ngIf="userAuthenticated">
+          <!-- Once user logged in - will have the option to logout (authenticated mode) -->
+          <a>Logout</a>
+        </li>
+        <li *ngIf="userAuthenticated"
+            appDropdown
+            class="dropdown"> <!-- can't store or refresh data - if not authenticated -->
           <!-- nice dropdown feature, uses our created directive dropdown - which listens to click when to dropdown -->
           <a class="dropdown-toggle"
              role="button">Manage Data <span class="caret"></span>
@@ -28,6 +35,7 @@
           </a>
           <ul class="dropdown-menu"> <!-- once dropdown feature clicked here's whats inside -->
             <li><a (click)="onSaveData()" style="cursor: pointer;">Save</a></li>
+            <!-- the cursor feature lets the user know the text is clickable -->
             <li><a (click)="onFetchData()" style="cursor: pointer;">Refresh</a></li>
           </ul>
         </li>

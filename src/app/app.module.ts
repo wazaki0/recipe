@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core'; // imported from angular first
 import {BrowserModule} from '@angular/platform-browser';
 import {ReactiveFormsModule} from '@angular/forms';
 import {YouTubePlayerModule} from '@angular/youtube-player';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
@@ -22,6 +22,8 @@ import {RecipesResolverService} from './recipes/recipes-resolver.service';
 import {AuthComponent} from './auth/auth.component';
 import {AuthService} from './auth/auth.service';
 import {LoadingSpinnerComponent} from './shared/loading-spinner/loading-spinner.component';
+import {AuthInterceptorService} from './auth/auth.interceptor.service';
+import {AuthGuard} from './auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,15 @@ import {LoadingSpinnerComponent} from './shared/loading-spinner/loading-spinner.
     VideoModule,
     AppRoutingModule,
   ],
-  providers: [RecipeService, DataStorageService, RecipesResolverService, AuthService], // allows use in child components - meaning all components
+  providers: [RecipeService,
+    DataStorageService,
+    RecipesResolverService,
+    AuthService,
+    AuthGuard,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
+
+  // interceptors need special initialization - multi enables more interceptors to be present
+  // providers allows use in child components of app module - meaning all components
   bootstrap: [AppComponent] // what starts application
 })
 export class AppModule {
