@@ -87,11 +87,14 @@ export class RecipeService {
       });
   }
 
-  updateRecipe(key: string, newRecipe: RecipeDB): void {
-    // TODO: update firebase and fetch new data
+  updateRecipe(key: string, recipe: Recipe): void {
 
-    // this.recipes[index] = newRecipe;
-    // this.recipesChanged.next(this.recipes.slice());
+    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`, recipe)
+      .pipe(
+        tap(response => {
+          this.fetchRecipes().subscribe();
+        })
+      ).subscribe();
   }
 
   deleteRecipe(key: string): void {
