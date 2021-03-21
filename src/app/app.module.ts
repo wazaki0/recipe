@@ -51,8 +51,6 @@ import {AuthGuard} from './auth/auth.guard';
   providers: [
     DataStorageService,
     RecipesResolverService,
-    AuthService,
-    AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
 
   // interceptors need special initialization - multi enables more interceptors to be present

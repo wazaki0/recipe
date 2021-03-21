@@ -17,7 +17,7 @@ export interface AuthResponseData { // exported so I can use in auth.component.t
   registered?: boolean;
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService {
   user = new BehaviorSubject<User>(null);
   private logoutTimer: any;
@@ -69,21 +69,21 @@ export class AuthService {
 
   autoLogin(): void {
     const tmpData = JSON.parse(localStorage.getItem('userData'));
-
-    const userData: User = new User(tmpData.email, tmpData.id, tmpData.token, tmpData.tokenExpiryDate); // if saved onto browser
-    if (!userData) { // if empty - no auto-login feature possible
+    if (!tmpData) { // if empty - no auto-login feature possible
       return;
     }
+    const userData: User = new User(tmpData.email, tmpData.id, tmpData.token, tmpData.tokenExpiryDate); // if saved onto browser
 
     if (userData.getToken()) { // null if invalid token (expired or not right token)
       this.user.next(userData); // if true - forward the loaded user
-      this.autoLogout((userData.getTokenExpiryDate().getTime() - new Date().getTime()) * 1000);
+      this.autoLogout((userData.getTokenExpiryDate().getTime() - new Date().getTime()));
       // logout after expiry date amount of seconds passed
     }
 
   }
 
   autoLogout(expirationDuration: number): void {
+    console.log(`**** lougoutTime: ${expirationDuration/1000} seconds, ${(expirationDuration/1000)/60} minutes`);
     this.logoutTimer = setTimeout(() => {
       this.logout(); // after token expires
     }, expirationDuration);
