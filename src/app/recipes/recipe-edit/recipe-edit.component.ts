@@ -38,8 +38,10 @@ export class RecipeEditComponent implements OnInit {
 
     if (this.editMode) {
       this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value);
+      //this.recipeService.fetchRecipes('pendingrecipes').subscribe();
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
+      //this.recipeService.fetchRecipes('pendingrecipes').subscribe();
     }
     this.router.navigate(['../'], {relativeTo: this.route});
   }

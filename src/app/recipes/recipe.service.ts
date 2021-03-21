@@ -94,8 +94,7 @@ export class RecipeService {
           const db = new RecipeDB();
           db.id = response.toString();
           db.recipe = recipe;
-          this.recipes.push(db);
-          this.recipesChanged.next(this.recipes.slice()); // indicates change of recipe array
+          this.fetchRecipes('pendingrecipes').subscribe();
         })
       )
       .subscribe(response => {
@@ -104,21 +103,21 @@ export class RecipeService {
       });
   }
 
-  updateRecipe(key: string, recipe: Recipe): void {
+  updateRecipe(key: string, recipe: Recipe, sourceTable: string = 'pendingrecipes'): void {
     recipe.userId = this.currentUser.id;
-    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes/${key}.json`, recipe)
+    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`, recipe)
       .pipe(
         tap(response => {
-          this.fetchRecipes('pendingrecipes').subscribe();
+          this.fetchRecipes(sourceTable).subscribe();
         })
       ).subscribe();
   }
 
-  deleteRecipe(key: string): void {
-    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
+  deleteRecipe(key: string, sourceTable: string = 'pendingrecipes'): void {
+    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
       .pipe(
         tap(response => {
-          this.fetchRecipes('recipes').subscribe();
+          this.fetchRecipes(sourceTable).subscribe();
         })
       ).subscribe();
   }
