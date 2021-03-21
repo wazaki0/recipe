@@ -115,7 +115,7 @@ export class RecipeService {
   }
 
   deleteRecipe(key: string): void {
-    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
+    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes/${key}.json`)
       .pipe(
         tap(response => {
           this.fetchRecipes('recipes').subscribe();
