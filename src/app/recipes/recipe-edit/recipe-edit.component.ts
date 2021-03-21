@@ -74,7 +74,8 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
-      const recipe = this.recipeService.getRecipe(this.recipeId);
+      const recipeDB = this.recipeService.getRecipe(this.recipeId);
+      const recipe = recipeDB.recipe;
       recipeName = recipe.name;
       recipeImageUrl = recipe.imageUrl;
       recipeYoutubeUrl = recipe.youtubeUrl;

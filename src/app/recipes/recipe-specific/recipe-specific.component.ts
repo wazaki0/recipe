@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from '../recipe.model';
+import {Recipe, RecipeDB} from '../recipe.model';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {RecipeService} from '../recipe.service';
 
@@ -9,6 +9,7 @@ import {RecipeService} from '../recipe.service';
   styleUrls: ['./recipe-specific.component.css']
 })
 export class RecipeSpecificComponent implements OnInit {
+  recipeDB: RecipeDB;
   recipe: Recipe;
   recipeIndex: number; // to identify specific recipe from url (recipes/:id)
 
@@ -20,7 +21,8 @@ export class RecipeSpecificComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.recipeIndex = +params.id;
-        this.recipe = this.recipeService.getRecipe(this.recipeIndex); // no need to unsubscribe - angular does this for us
+        this.recipeDB = this.recipeService.getRecipe(this.recipeIndex); // no need to unsubscribe - angular does this for us
+        this.recipe = this.recipeDB.recipe;
       }
     );
   }

@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   autoLogout(expirationDuration: number): void {
-    console.log(`**** lougoutTime: ${expirationDuration/1000} seconds, ${(expirationDuration/1000)/60} minutes`);
+    console.log(`**** lougoutTime: ${expirationDuration / 1000} seconds, ${(expirationDuration / 1000) / 60} minutes`);
     this.logoutTimer = setTimeout(() => {
       this.logout(); // after token expires
     }, expirationDuration);
@@ -138,5 +138,5 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
     /* store user information (nicknamed userData) to browser - so when user reloads browser - doesn't have to login again
     (also uses auto-login). JSON.stringify converts java object into string version of it */
-  };
+  }
 }

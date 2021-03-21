@@ -25,3 +25,9 @@ export class Recipe { // this class will be template for each recipe
   }
 
 }
+
+
+export class RecipeDB {
+  public id: string;
+  public recipe: Recipe;
+}

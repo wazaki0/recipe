@@ -19,6 +19,7 @@ export class RecipesResolverService implements Resolve<Recipe[]> {
 
     if (recipes.length === 0) {
 //      return this.dataStorageService.fetchRecipes(); // if recipe[] empty, we can overwrite all recipes using database
+        this.recipeService.fetchRecipes().subscribe();
     } else {
       return recipes;
       /* if recipe[] loaded already, we don't want to delete any information that could have been edited

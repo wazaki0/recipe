@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {Recipe} from '../recipe.model';
+import {Recipe, RecipeDB} from '../recipe.model';
 import {RecipeService} from '../recipe.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
   @Output() recipeItemClicked = new EventEmitter<Recipe>();
-  recipes: Recipe[]; // will be copied from the recipes from recipe.service
+  recipes: RecipeDB[]; // will be copied from the recipes from recipe.service
   subscription: Subscription;
 
   constructor(private recipeService: RecipeService,
@@ -19,9 +19,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.recipeService.fetchRecipes().subscribe();
+
     this.subscription = this.recipeService.recipesChanged.subscribe(
-      (recipes: Recipe[]) => {
-        this.recipes = recipes;
+      (recipesDB: RecipeDB[]) => {
+        this.recipes = recipesDB;
       }
     );
     this.recipes = this.recipeService.getRecipes();
