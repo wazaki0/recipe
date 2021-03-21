@@ -1,7 +1,7 @@
 import {ApprovalStatus, Recipe, RecipeDB} from './recipe.model';
 import {Observable, Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {map, tap} from 'rxjs/operators';
 import {User} from '../auth/user.module';
@@ -14,7 +14,7 @@ export class RecipeService {
   recipesChanged = new Subject<RecipeDB[]>();
   currentUser: User;
 
-  adminUsers: string[] = ['9DLNBagz0ehZAgGyK7OXDgmAwsu2', '74UF29bhuqXrQlXvB9HhF42KgqS2', 'WS7KMuZxCzQAFREHgUTSxVfOUOv2'];
+  adminUsers: string[] = ['9DLNBagz0ehZAgGyK7OXDgmAwsu2', '74UF29bhuqXrQlXvB9HhF42KgqS2'];
 
   // Already saved onto database!
   private recipes: RecipeDB[] = [];
@@ -34,8 +34,14 @@ export class RecipeService {
   }
 
   async getRecipe(key: string, sourceTable: string = 'recipes'): Promise<RecipeDB> {
+    const params: HttpParams = new HttpParams();
 
-    const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
+    if (sourceTable === 'pendingrecipes') {
+      params.append('orderBy', '"userId"');
+      params.append('equalTo', '"' + this.currentUser.id + '"');
+    }
+
+    const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`, {params})
       .pipe(
         map(result => {
           if (result) {
@@ -53,16 +59,24 @@ export class RecipeService {
   }
 
   fetchRecipes(sourceTable: string): Observable<RecipeDB[]> {
-    /* const params: HttpParams = new HttpParams()
-       .set('orderBy', '"status"')
-       .set('status', '"APPROVED"');*/
+    const params: HttpParams = new HttpParams();
+
+    if (sourceTable === 'pendingrecipes') {
+      params.append('orderBy', '"userId"');
+      params.append('equalTo', '"' + this.currentUser.id + '"');
+    }
+
     // {params}
 
-    return this.http.get<RecipeDB[]>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}.json`
+    return this.http.get<RecipeDB[]>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}.json`, {params}
     )
       .pipe(
         // SECOND PART REQUEST FOR RECIPES (first part in auth.interceptor)
         map(recipes => { // map is an operator which transforms an HTTP request (in this case response - from application server)
+          if (!recipes) {
+            return [];
+          }
+
           const rowIds: string[] = Object.keys(recipes);
           const resultData: RecipeDB[] = [];
 
