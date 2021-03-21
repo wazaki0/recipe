@@ -11,6 +11,7 @@ import {RecipeService} from '../recipe.service';
 export class RecipeSpecificComponent implements OnInit {
   recipeDB: RecipeDB;
   recipe: Recipe;
+  isLoading: boolean = false;
   recipeKey: string; // to identify specific recipe from url (recipes/:id)
 
   constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router) {
@@ -21,9 +22,11 @@ export class RecipeSpecificComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.recipeKey = params.id;
+        this.isLoading = true;
         this.recipeService.getRecipe(this.recipeKey).then(data => {
           this.recipeDB = data;
           this.recipe = this.recipeDB.recipe;
+          this.isLoading = false;
         }); // no need to unsubscribe - angular does this for us
       }
     );
