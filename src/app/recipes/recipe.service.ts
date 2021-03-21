@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {map, tap} from 'rxjs/operators';
 import {User} from '../auth/user.module';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class RecipeService {
@@ -17,7 +18,8 @@ export class RecipeService {
   private recipes: RecipeDB[] = [];
 
   constructor(private http: HttpClient,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private router: Router) {
 
     this.authService.user
       .subscribe(user => { // when component initialized, subscribe to userAuthenticated change
@@ -26,26 +28,22 @@ export class RecipeService {
   }
 
   async getRecipe(key: string, sourceTable: string = 'recipes'): Promise<RecipeDB> {
-    const recipe = this.recipes.find(recipeDB => recipeDB.id === key); // based on key
 
-    if (!recipe) {
-      const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
-        .pipe(
-          map(result => {
-            if (result) {
-              const recipe2 = {...result, ingredient: result.ingredients ? result.ingredients : []};
-              const recipeDB = new RecipeDB();
-              recipeDB.id = key;
-              recipeDB.recipe = recipe2;
-              return recipeDB;
-            }
-            return null;
-          })
-        ).toPromise();
-      console.log(recipeDb);
-      return recipeDb;
-    }
-    return recipe;
+    const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
+      .pipe(
+        map(result => {
+          if (result) {
+            const recipe2 = {...result, ingredient: result.ingredients ? result.ingredients : []};
+            const recipeDB = new RecipeDB();
+            recipeDB.id = key;
+            recipeDB.recipe = recipe2;
+            return recipeDB;
+          }
+          return null;
+        })
+      ).toPromise();
+    console.log(recipeDb);
+    return recipeDb;
   }
 
   fetchRecipes(sourceTable: string): Observable<RecipeDB[]> {
@@ -83,18 +81,19 @@ export class RecipeService {
     return this.recipes.slice(); // slice creates a direct copy - which prevents the access from outside - only view
   }
 
-  addRecipe(recipe: Recipe): void {
+  addRecipe(recipe: Recipe, sourceTable: string, route: ActivatedRoute): void {
     recipe.userId = this.currentUser.id;
     recipe.status = ApprovalStatus.Pending;
 
-    this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes.json', recipe)
+    this.http.post(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}.json`, recipe)
       .pipe(
         tap(response => {
           console.log('add recipe response: ' + response);
           const db = new RecipeDB();
           db.id = response.toString();
           db.recipe = recipe;
-          this.fetchRecipes('pendingrecipes').subscribe();
+          this.fetchRecipes(sourceTable).subscribe();
+          this.router.navigate(['../'], {relativeTo: route});
         })
       )
       .subscribe(response => {
@@ -103,21 +102,23 @@ export class RecipeService {
       });
   }
 
-  updateRecipe(key: string, recipe: Recipe, sourceTable: string = 'pendingrecipes'): void {
+  updateRecipe(key: string, recipe: Recipe, sourceTable: string, route: ActivatedRoute): void {
     recipe.userId = this.currentUser.id;
     this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`, recipe)
       .pipe(
         tap(response => {
           this.fetchRecipes(sourceTable).subscribe();
+          this.router.navigate(['../'], {relativeTo: route});
         })
       ).subscribe();
   }
 
-  deleteRecipe(key: string, sourceTable: string = 'pendingrecipes'): void {
+  deleteRecipe(key: string, sourceTable: string = 'pendingrecipes', route: ActivatedRoute): void {
     this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
       .pipe(
         tap(response => {
           this.fetchRecipes(sourceTable).subscribe();
+          this.router.navigate(['../'], {relativeTo: route});
         })
       ).subscribe();
   }

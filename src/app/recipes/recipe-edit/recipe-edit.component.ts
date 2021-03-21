@@ -37,13 +37,10 @@ export class RecipeEditComponent implements OnInit {
   onSubmit(): void { // when submitting the filled in recipe to recipe-service (to update the recipes array)
 
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value);
-      //this.recipeService.fetchRecipes('pendingrecipes').subscribe();
+      this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value, 'pendingrecipes', this.route);
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
-      //this.recipeService.fetchRecipes('pendingrecipes').subscribe();
+      this.recipeService.addRecipe(this.recipeForm.value, 'pendingrecipes', this.route);
     }
-    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   onAddIngredients(): void { // while adding ingredients, adds an ingredient object to ingredients array
