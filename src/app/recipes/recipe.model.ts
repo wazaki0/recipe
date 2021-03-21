@@ -17,7 +17,7 @@ export class Recipe { // this class will be template for each recipe
   public methodOfCooking: string;
   public cookingTime: number;
   public status: ApprovalStatus;
-  public userId?: string;
+  public userId: string;
 
   constructor(name: string, description: string, imagePath: string, youtubeUrl: string, ingredients: Ingredient[],
               region: string, typeOfFood: string, methodOfCooking: string, cookingTime: number, status: ApprovalStatus, userId: string) {

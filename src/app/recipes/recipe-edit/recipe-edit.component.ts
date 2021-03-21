@@ -12,6 +12,7 @@ export class RecipeEditComponent implements OnInit {
   recipeKey: string;
   editMode = false;
   recipeForm: FormGroup;
+  isInit = false;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -28,6 +29,7 @@ export class RecipeEditComponent implements OnInit {
         this.recipeKey = params.id; // the id of the website - representing recipe
         this.editMode = params.id != null; // if id existed, edit mode - otherwise create mode
         this.initForm();
+        this.isInit = true;
       }
     );
   }
@@ -74,7 +76,7 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
-      const recipeDB = await this.recipeService.getRecipe(this.recipeKey);
+      const recipeDB = await this.recipeService.getRecipe(this.recipeKey, 'pendingrecipes');
       const recipe = recipeDB.recipe;
       recipeName = recipe.name;
       recipeImageUrl = recipe.imageUrl;

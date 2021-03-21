@@ -1,5 +1,6 @@
 <div class="row"> <!-- for mobiles - where it can cut to another row -->
-  <div class="col-xs-12"> <!-- xs allows scalable from mobile phones to larger (12 is full width) -->
+  <div *ngIf="isInit && recipeForm" class="col-xs-12">
+    <!-- xs allows scalable from mobile phones to larger (12 is full width) -->
     <form (ngSubmit)="onSubmit()" [formGroup]="recipeForm"> <!-- data binding to formGroup - based on our initForm() -->
 
       <div class="row">

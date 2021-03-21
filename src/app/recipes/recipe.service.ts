@@ -25,11 +25,11 @@ export class RecipeService {
       });
   }
 
-  async getRecipe(key: string): Promise<RecipeDB> {
+  async getRecipe(key: string, sourceTable: string = 'recipes'): Promise<RecipeDB> {
     const recipe = this.recipes.find(recipeDB => recipeDB.id === key); // based on key
 
     if (!recipe) {
-      const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
+      const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
         .pipe(
           map(result => {
             if (result) {
@@ -105,7 +105,7 @@ export class RecipeService {
   }
 
   updateRecipe(key: string, recipe: Recipe): void {
-    recipe.status = ApprovalStatus.Pending;
+    recipe.userId = this.currentUser.id;
     this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes/${key}.json`, recipe)
       .pipe(
         tap(response => {
