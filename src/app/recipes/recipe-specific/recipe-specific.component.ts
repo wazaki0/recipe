@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Recipe, RecipeDB} from '../recipe.model';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {RecipeService} from '../recipe.service';
+import {AuthService} from '../../auth/auth.service';
+import {User} from '../../auth/user.module';
 
 @Component({
   selector: 'app-recipe-specific',
@@ -11,11 +13,17 @@ import {RecipeService} from '../recipe.service';
 export class RecipeSpecificComponent implements OnInit {
   recipeDB: RecipeDB;
   recipe: Recipe;
+  currentUser: User;
   isLoading: boolean = false;
   recipeKey: string; // to identify specific recipe from url (recipes/:id)
 
-  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router) {
+  constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router,
+              private authService: AuthService) {
 
+    this.authService.user
+      .subscribe(user => { // when component initialized, subscribe to userAuthenticated change
+        this.currentUser = user;
+      });
   }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
-import {Recipe, RecipeDB} from './recipe.model';
+import {ApprovalStatus, Recipe, RecipeDB} from './recipe.model';
 import {Observable, Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {map, tap} from 'rxjs/operators';
 import {User} from '../auth/user.module';
@@ -49,7 +49,10 @@ export class RecipeService {
   }
 
   fetchRecipes(): Observable<RecipeDB[]> {
-    return this.http.get<RecipeDB[]>('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json')
+    const params: HttpParams = new HttpParams().set('orderBy', 'name').append('status', 'APPROVED');
+
+    return this.http.get<RecipeDB[]>('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json',
+      {params})
       .pipe(
         // SECOND PART REQUEST FOR RECIPES (first part in auth.interceptor)
         map(recipes => { // map is an operator which transforms an HTTP request (in this case response - from application server)
@@ -79,6 +82,7 @@ export class RecipeService {
 
   addRecipe(recipe: Recipe): void {
     recipe.userId = this.currentUser.id;
+    recipe.status = ApprovalStatus.Pending;
 
     this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json', recipe)
       .pipe(
@@ -98,7 +102,7 @@ export class RecipeService {
   }
 
   updateRecipe(key: string, recipe: Recipe): void {
-
+    recipe.status = ApprovalStatus.Pending;
     this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`, recipe)
       .pipe(
         tap(response => {

@@ -30,7 +30,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
 
           const modifiedRequest = req.clone({ // create a clone, in order to modify it - with the needed user token
-            params: new HttpParams().set('auth', user.getToken())
+            params: req.params ? req.params.append('auth', user.getToken()) : new HttpParams().set('auth', user.getToken())
           });
 
           return next.handle(modifiedRequest); // each request for database, but edited to contain user token
