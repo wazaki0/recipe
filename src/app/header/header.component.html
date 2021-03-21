@@ -25,20 +25,6 @@
           <!-- Once user logged in - will have the option to logout (authenticated mode) -->
           <a>Logout</a>
         </li>
-        <li *ngIf="userAuthenticated"
-            appDropdown
-            class="dropdown"> <!-- can't store or refresh data - if not authenticated -->
-          <!-- nice dropdown feature, uses our created directive dropdown - which listens to click when to dropdown -->
-          <a class="dropdown-toggle"
-             role="button">Manage Data <span class="caret"></span>
-            <!-- clickable bootstrap dropdown, with arrow (from span) -->
-          </a>
-          <ul class="dropdown-menu"> <!-- once dropdown feature clicked here's whats inside -->
-            <li><a (click)="onSaveData()" style="cursor: pointer;">Save</a></li>
-            <!-- the cursor feature lets the user know the text is clickable -->
-            <li><a (click)="onFetchData()" style="cursor: pointer;">Refresh</a></li>
-          </ul>
-        </li>
       </ul>
     </div>
   </div>

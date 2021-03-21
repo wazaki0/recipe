@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DataStorageService} from '../shared/data-storage.service';
 import {AuthService} from '../auth/auth.service';
 import {Subscription} from 'rxjs';
 
@@ -17,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   //   this.menuClicked.emit(text);
   // }
 
-  constructor(private dataStorageService: DataStorageService, private authService: AuthService) {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -32,19 +31,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSaveData(): void {
-    this.dataStorageService.storeRecipes(); // save recipes created
-  }
-
   onLogout(): void {
     this.authService.logout(); // logout after click - change route - this can however be done elsewhere where user subscribed present
     // (redirect route done in auth.service)
   }
 
-  onFetchData(): void {
-    this.dataStorageService.fetchRecipes().subscribe();
-    // subscribe needed to send http request, though we don't need something out of it as tap overwrites recipes already
-  }
 
   ngOnDestroy(): void { // when component destroyed - not present
     this.userSub.unsubscribe(); // unsubscribe - as next time initialized will subscribe again anyway

@@ -68,23 +68,38 @@ export class AuthService {
   }
 
   autoLogin(): void {
-    const userData: User = JSON.parse(localStorage.getItem('userData')); // if saved onto browser
-    if (!userData) { // if empty - no auto-login feature possible
+    const tmpData = JSON.parse(localStorage.getItem('userData'));
+    if (!tmpData) { // if empty - no auto-login feature possible
       return;
     }
+    const userData: User = new User(
+      tmpData.email,
+      tmpData.id,
+      tmpData.token,
+      new Date(tmpData.tokenExpiryDate)); // if saved onto browser
+
+    // const userData: User = JSON.parse(localStorage.getItem('userData'));
 
     if (userData.getToken()) { // null if invalid token (expired or not right token)
       this.user.next(userData); // if true - forward the loaded user
-      this.autoLogout((userData.getTokenExpiryDate().getTime() - new Date().getTime()) * 1000);
+      const expirationDuration = new Date(tmpData.tokenExpiryDate).getTime() - new Date().getTime();
+      this.autoLogout(expirationDuration);
       // logout after expiry date amount of seconds passed
     }
 
   }
 
   autoLogout(expirationDuration: number): void {
+    // this.logoutTimer = setTimeout(() => {
+    //   this.logout();
+    // }, expirationDuration);
+    const expiration = expirationDuration;
+
     this.logoutTimer = setTimeout(() => {
-      this.logout(); // after token expires
-    }, expirationDuration);
+      this.logout();
+    }, expiration);
+
+    console.log(expiration);
   }
 
   private handleError(errorRes: HttpErrorResponse): Observable<AuthResponseData> {

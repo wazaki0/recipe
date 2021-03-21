@@ -28,7 +28,6 @@ export class AuthInterceptorService implements HttpInterceptor {
             return next.handle(req); // the request continues, without added authenticaiton - not needed
           }
 
-
           const modifiedRequest = req.clone({ // create a clone, in order to modify it - with the needed user token
             params: new HttpParams().set('auth', user.getToken())
           });
