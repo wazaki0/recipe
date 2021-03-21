@@ -9,7 +9,7 @@ import {RecipeService} from '../recipe.service';
   styleUrls: ['./recipe-edit.component.css']
 })
 export class RecipeEditComponent implements OnInit {
-  recipeId: number;
+  recipeKey: string;
   editMode = false;
   recipeForm: FormGroup;
 
@@ -25,7 +25,7 @@ export class RecipeEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe( // every time routing changes
       (params: Params) => {
-        this.recipeId = params.id; // the id of the website - representing recipe
+        this.recipeKey = params.id; // the id of the website - representing recipe
         this.editMode = params.id != null; // if id existed, edit mode - otherwise create mode
         this.initForm();
       }
@@ -35,7 +35,7 @@ export class RecipeEditComponent implements OnInit {
   onSubmit(): void { // when submitting the filled in recipe to recipe-service (to update the recipes array)
 
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.recipeId, this.recipeForm.value);
+      this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value);
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
@@ -74,7 +74,7 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
-      const recipeDB = this.recipeService.getRecipe(this.recipeId);
+      const recipeDB = this.recipeService.getRecipe(this.recipeKey);
       const recipe = recipeDB.recipe;
       recipeName = recipe.name;
       recipeImageUrl = recipe.imageUrl;

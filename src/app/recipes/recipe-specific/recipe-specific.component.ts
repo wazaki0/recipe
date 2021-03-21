@@ -11,7 +11,7 @@ import {RecipeService} from '../recipe.service';
 export class RecipeSpecificComponent implements OnInit {
   recipeDB: RecipeDB;
   recipe: Recipe;
-  recipeIndex: number; // to identify specific recipe from url (recipes/:id)
+  recipeKey: string; // to identify specific recipe from url (recipes/:id)
 
   constructor(private recipeService: RecipeService, private route: ActivatedRoute, private router: Router) {
 
@@ -20,8 +20,8 @@ export class RecipeSpecificComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(
       (params: Params) => {
-        this.recipeIndex = +params.id;
-        this.recipeDB = this.recipeService.getRecipe(this.recipeIndex); // no need to unsubscribe - angular does this for us
+        this.recipeKey = params.id;
+        this.recipeDB = this.recipeService.getRecipe(this.recipeKey); // no need to unsubscribe - angular does this for us
         this.recipe = this.recipeDB.recipe;
       }
     );
@@ -39,7 +39,7 @@ export class RecipeSpecificComponent implements OnInit {
   }
 
   onDeleteRecipe(): void {
-    this.recipeService.deleteRecipe(this.recipeIndex);
+    this.recipeService.deleteRecipe(this.recipeKey);
     this.router.navigate(['/recipes']);
   }
 }

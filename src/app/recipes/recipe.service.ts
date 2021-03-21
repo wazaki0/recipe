@@ -19,8 +19,8 @@ export class RecipeService {
               private authService: AuthService) {
   }
 
-  getRecipe(index: number): RecipeDB {
-    return this.recipes[index]; // based on id - index of array - gets that recipe
+  getRecipe(key: string): RecipeDB {
+    return this.recipes.find(recipeDB => recipeDB.id === key); // based on key
   }
 
   fetchRecipes(): Observable<RecipeDB[]> {
@@ -71,14 +71,18 @@ export class RecipeService {
       });
   }
 
-  updateRecipe(index: number, newRecipe: RecipeDB): void {
-    this.recipes[index] = newRecipe;
-    this.recipesChanged.next(this.recipes.slice());
+  updateRecipe(key: string, newRecipe: RecipeDB): void {
+    // TODO: update firebase and fetch new data
+
+    // this.recipes[index] = newRecipe;
+    // this.recipesChanged.next(this.recipes.slice());
   }
 
-  deleteRecipe(index: number): void {
-    this.recipes.splice(index, 1);
-    this.recipesChanged.next(this.recipes.slice());
+  deleteRecipe(key: string): void {
+    // TODO: delete on server and fetch list again
+
+    // this.recipes.splice(index, 1);
+    // this.recipesChanged.next(this.recipes.slice());
   }
 
   overwriteRecipes(recipes: RecipeDB[]): void { // sets all recipes wanted visible to our array of recipes visible

@@ -10,9 +10,10 @@ export class Recipe { // this class will be template for each recipe
   public typeOfFood: string;
   public methodOfCooking: string;
   public cookingTime: number;
+  public userId?: string;
 
   constructor(name: string, description: string, imagePath: string, youtubeUrl: string, ingredients: Ingredient[],
-              region: string, typeOfFood: string, methodOfCooking: string, cookingTime: number) {
+              region: string, typeOfFood: string, methodOfCooking: string, cookingTime: number, userId: string) {
     this.name = name;
     this.description = description;
     this.imageUrl = imagePath;
@@ -22,6 +23,7 @@ export class Recipe { // this class will be template for each recipe
     this.typeOfFood = typeOfFood;
     this.methodOfCooking = methodOfCooking;
     this.cookingTime = cookingTime;
+    this.userId = userId;
   }
 
 }
