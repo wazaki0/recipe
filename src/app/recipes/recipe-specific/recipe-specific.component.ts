@@ -21,8 +21,10 @@ export class RecipeSpecificComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.recipeKey = params.id;
-        this.recipeDB = this.recipeService.getRecipe(this.recipeKey); // no need to unsubscribe - angular does this for us
-        this.recipe = this.recipeDB.recipe;
+        this.recipeService.getRecipe(this.recipeKey).then(data => {
+          this.recipeDB = data;
+          this.recipe = this.recipeDB.recipe;
+        }); // no need to unsubscribe - angular does this for us
       }
     );
   }

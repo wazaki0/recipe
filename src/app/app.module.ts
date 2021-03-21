@@ -16,14 +16,9 @@ import {HomeComponent} from './home/home.component';
 import {AppRoutingModule} from './app-routing.module';
 import {RecipeStartComponent} from './recipes/recipe-start/recipe-start.component';
 import {RecipeEditComponent} from './recipes/recipe-edit/recipe-edit.component';
-import {RecipeService} from './recipes/recipe.service';
-import {DataStorageService} from './shared/data-storage.service';
-import {RecipesResolverService} from './recipes/recipes-resolver.service';
 import {AuthComponent} from './auth/auth.component';
-import {AuthService} from './auth/auth.service';
 import {LoadingSpinnerComponent} from './shared/loading-spinner/loading-spinner.component';
 import {AuthInterceptorService} from './auth/auth.interceptor.service';
-import {AuthGuard} from './auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -49,8 +44,6 @@ import {AuthGuard} from './auth/auth.guard';
     AppRoutingModule,
   ],
   providers: [
-    DataStorageService,
-    RecipesResolverService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
 
   // interceptors need special initialization - multi enables more interceptors to be present

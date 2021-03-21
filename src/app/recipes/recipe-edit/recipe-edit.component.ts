@@ -62,7 +62,7 @@ export class RecipeEditComponent implements OnInit {
     (this.recipeForm.get('ingredients') as FormArray).removeAt(index); // delete recipe at that index
   }
 
-  private initForm(): void { // the initialization of a recipe form
+  private async initForm(): Promise<void> { // the initialization of a recipe form
     let recipeName = '';
     let recipeImageUrl = '';
     let recipeYoutubeUrl = '';
@@ -74,7 +74,7 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
-      const recipeDB = this.recipeService.getRecipe(this.recipeKey);
+      const recipeDB = await this.recipeService.getRecipe(this.recipeKey);
       const recipe = recipeDB.recipe;
       recipeName = recipe.name;
       recipeImageUrl = recipe.imageUrl;

@@ -12,15 +12,31 @@ export class RecipeService {
   recipesChanged = new Subject<RecipeDB[]>();
 
 
-   // Already saved onto database!
+  // Already saved onto database!
   private recipes: RecipeDB[] = [];
 
   constructor(private http: HttpClient,
               private authService: AuthService) {
   }
 
-  getRecipe(key: string): RecipeDB {
-    return this.recipes.find(recipeDB => recipeDB.id === key); // based on key
+  async getRecipe(key: string): Promise<RecipeDB> {
+    const recipe = this.recipes.find(recipeDB => recipeDB.id === key); // based on key
+
+    if (!recipe) {
+      const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
+        .pipe(
+          map(result => {
+            const recipe2 = {...result, ingredient: result.ingredients ? result.ingredients : []};
+            const recipeDB = new RecipeDB();
+            recipeDB.id = key;
+            recipeDB.recipe = recipe2;
+            return recipeDB;
+          })
+        ).toPromise();
+      console.log(recipeDb);
+      return recipeDb;
+    }
+    return recipe;
   }
 
   fetchRecipes(): Observable<RecipeDB[]> {

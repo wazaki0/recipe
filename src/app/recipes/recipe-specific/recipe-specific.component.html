@@ -1,92 +1,95 @@
-<div class="row">
-  <div class="col-xs-12"> <!-- column using full available width-->
-    <!--    <img-->
-    <!--      src="{{recipe.imageUrl}}"-->
-    <!--      alt=""-->
-    <!--      class="img-responsive" style="max-height: 300px">-->
-    <app-video [videoUrl]="recipe.youtubeUrl"></app-video>
-    <!-- uses the videourl and method to provide videoID from youtube -->
+<div *ngIf="recipe">
+  <div class="row">
+    <div class="col-xs-12"> <!-- column using full available width-->
+      <!--    <img-->
+      <!--      src="{{recipe.imageUrl}}"-->
+      <!--      alt=""-->
+      <!--      class="img-responsive" style="max-height: 300px">-->
+      <app-video [videoUrl]="recipe.youtubeUrl"></app-video>
+      <!-- uses the videourl and method to provide videoID from youtube -->
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-xs-12"> <!-- column using full available width-->
-    <h3>{{recipe.name}}</h3>
+  <div class="row">
+    <div class="col-xs-12"> <!-- column using full available width-->
+      <h3>{{recipe.name}}</h3>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
-    <div appDropdown
-         class="btn-group">
-      <button class="btn btn-primary dropdown-toggle" type="button"><!-- button and dropdown feature  -->
-        Manage recipe <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a (click)="onEditRecipe()" style="cursor: pointer;">Edit Recipe</a>
-          <a (click)="onDeleteRecipe()" style="cursor: pointer;">Delete Recipe</a>
+  <div class="row">
+    <div class="col-xs-12">
+      <div appDropdown
+           class="btn-group">
+        <button class="btn btn-primary dropdown-toggle" type="button"><!-- button and dropdown feature  -->
+          Manage recipe <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a (click)="onEditRecipe()" style="cursor: pointer;">Edit Recipe</a>
+            <a (click)="onDeleteRecipe()" style="cursor: pointer;">Delete Recipe</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <p>
+        Description of Recipe:
+        {{recipe.description}}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h5>
+        Ingredients:
+      </h5>
+      <ul class="list-group">
+        <li *ngFor="let ingredient of recipe.ingredients"
+            class="list-group-item"
+            style="margin-top: 5px;"> <!-- recipe is installed through input, margin for better look -->
+          {{ingredient.name}} {{ingredient.amount}} <!-- displays ingredient and amount -->
         </li>
       </ul>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
-    <p>
-      Description of Recipe:
-      {{recipe.description}}
-    </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
-    <h5>
-      Ingredients:
-    </h5>
-    <ul class="list-group">
-      <li *ngFor="let ingredient of recipe.ingredients"
-          class="list-group-item"
-          style="margin-top: 5px;"> <!-- recipe is installed through input, margin for better look -->
-        {{ingredient.name}} {{ingredient.amount}} <!-- displays ingredient and amount -->
-      </li>
-    </ul>
-  </div>
-</div>
-<hr>
-<div class="row">
-  <div class="col-xs-12">
-    <div *ngIf="recipe.region"> <!-- true if string is filled in and not just '' -->
-      <b>Region of Recipe: </b>
-      <p>
-        {{recipe.region}}
-      </p>
-    </div>
-    <br>
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <div *ngIf="recipe.region"> <!-- true if string is filled in and not just '' -->
+        <b>Region of Recipe: </b>
+        <p>
+          {{recipe.region}}
+        </p>
+      </div>
+      <br>
 
-    <div *ngIf="recipe.methodOfCooking">
+      <div *ngIf="recipe.methodOfCooking">
+        <b>
+          Method of Cooking:
+        </b>
+        <p>
+          {{recipe.methodOfCooking}}
+        </p>
+      </div>
+      <br>
+
+      <div *ngIf="recipe.typeOfFood">
+        <b>
+          Type of Food:
+        </b>
+        <p>
+          {{recipe.typeOfFood}}
+        </p>
+      </div>
+      <br>
+
       <b>
-        Method of Cooking:
+        Cooking Time in Minutes:
       </b>
       <p>
-        {{recipe.methodOfCooking}}
+        {{recipe.cookingTime}}
       </p>
     </div>
-    <br>
-
-    <div *ngIf="recipe.typeOfFood">
-      <b>
-        Type of Food:
-      </b>
-      <p>
-        {{recipe.typeOfFood}}
-      </p>
-    </div>
-    <br>
-
-    <b>
-      Cooking Time in Minutes:
-    </b>
-    <p>
-      {{recipe.cookingTime}}
-    </p>
   </div>
 </div>
+
