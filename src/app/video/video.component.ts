@@ -10,6 +10,7 @@ export class VideoComponent implements OnInit {
   @Input() videoUrl: string;
 
   videoTag = 'oFHuhbNjoRM';
+
   ngOnInit(): void {
     const tag = document.createElement('script');
 
@@ -21,4 +22,15 @@ export class VideoComponent implements OnInit {
   getVideoID(): string {
     return this.videoUrl.split('v=')[1].split('&')[0];
   }
+
+  // validateYouTubeUrl(url: string): boolean {
+  //
+  //   const videoID = url.replace('http://', '')
+  //     .replace('https://', '')
+  //     .replace('www.', '')
+  //     .replace('youtu.be/', 'youtube.com?v=')
+  //     .slice(0, 14) === 'youtube.com?v=';
+  //   return videoID;
+  //
+  // }
 }
