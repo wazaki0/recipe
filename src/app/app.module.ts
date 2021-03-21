@@ -48,7 +48,7 @@ import {AuthGuard} from './auth/auth.guard';
     VideoModule,
     AppRoutingModule,
   ],
-  providers: [RecipeService,
+  providers: [
     DataStorageService,
     RecipesResolverService,
     AuthService,

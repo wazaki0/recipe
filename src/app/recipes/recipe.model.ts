@@ -1,7 +1,6 @@
 import {Ingredient} from '../shared/ingredient.module';
 
 export class Recipe { // this class will be template for each recipe
-
   public name: string; // assigning type for variable of class recipe
   public description: string;
   public imageUrl: string;

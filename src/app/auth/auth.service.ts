@@ -68,7 +68,9 @@ export class AuthService {
   }
 
   autoLogin(): void {
-    const userData: User = JSON.parse(localStorage.getItem('userData')); // if saved onto browser
+    const tmpData = JSON.parse(localStorage.getItem('userData'));
+
+    const userData: User = new User(tmpData.email, tmpData.id, tmpData.token, tmpData.tokenExpiryDate); // if saved onto browser
     if (!userData) { // if empty - no auto-login feature possible
       return;
     }

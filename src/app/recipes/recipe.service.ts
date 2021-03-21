@@ -1,32 +1,22 @@
 import {Recipe} from './recipe.model';
 import {Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../auth/auth.service';
 
+@Injectable({providedIn: 'root'})
 export class RecipeService {
   /* recipeSelected = new EventEmitter<Recipe>(); replaced by routing and
      subject - same function as eventemitter, but more efficient*/
   recipesChanged = new Subject<Recipe[]>();
 
-  /*private recipes: Recipe[] = [ // can directly access recipe from outside
-    new Recipe('TestRecipe',
-      'very juicy - maybe crispy?',
-      'https://cleanfoodcrush.com/wp-content/uploads/2019/01/Super-Easy-Chicken-Stir-Fry-Recipe-by-CFC.jpg',
-      'https://www.youtube.com/watch?v=MuZGBlYEYMo',
-      [
-        new Ingredient('Chicken Breast 300g', 1),
-        new Ingredient('Chicken wings', 2),
-        new Ingredient('Rice in g', 500)
-      ], '', 'Snack', 'Frying', 80),
-    new Recipe('Beans',
-      'very juicy - maybe crispy?',
-      'https://cleanfoodcrush.com/wp-content/uploads/2019/01/Super-Easy-Chicken-Stir-Fry-Recipe-by-CFC.jpg',
-      'https://www.youtube.com/watch?v=qyYHWkVWQ4o&ab_channel=KillerBean',
-      [
-        new Ingredient('Chicken Breast 300g', 1),
-        new Ingredient('Chicken wings', 2),
-        new Ingredient('Rice in g', 500)
-      ], '', 'Snack', 'Frying', 80)
-  ];*/ // Already saved onto database!
+
+   // Already saved onto database!
   private recipes: Recipe[] = [];
+
+  constructor(private http: HttpClient,
+              private authService: AuthService) {
+  }
 
   getRecipe(index: number): Recipe {
     return this.recipes[index]; // based on id - index of array - gets that recipe
@@ -37,8 +27,13 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe): void {
-    this.recipes.push(recipe);
-    this.recipesChanged.next(this.recipes.slice()); // indicates change of recipe array
+
+    this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json', recipe)
+      .subscribe(response => {
+        console.log('add recipe response: ' + response);
+        this.recipes.push(recipe);
+        this.recipesChanged.next(this.recipes.slice()); // indicates change of recipe array
+      });
   }
 
   updateRecipe(index: number, newRecipe: Recipe): void {

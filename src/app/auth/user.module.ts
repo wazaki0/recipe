@@ -5,6 +5,7 @@ export class User {
               private token: string,
               private tokenExpiryDate: Date
   ) {
+    this.tokenExpiryDate = new Date(tokenExpiryDate);
   }
 
   getToken(): string {
