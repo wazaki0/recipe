@@ -23,7 +23,7 @@ export class RecipesComponent {
       tap(event => {
         const ev = event as NavigationEnd;
 
-        if (ev.url === '/pending') {
+        if (ev.url.includes('/pending')) {
           this.sourceTable = 'pendingrecipes';
         } else {
           this.sourceTable = 'recipes';

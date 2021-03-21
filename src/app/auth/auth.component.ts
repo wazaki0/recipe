@@ -48,7 +48,7 @@ export class AuthComponent implements OnInit {
     authObservable.subscribe( // get the data from the stored observable
       resData => { // successful
         console.log(resData);
-        this.router.navigate(['/recipes']);
+        // this.router.navigate(['../']);
       }, errorMessage => { // error
         // we won't get the error here, but only the message we throw from auth.service.ts login()
         this.error = errorMessage;
