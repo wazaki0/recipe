@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthResponseData, AuthService} from './auth.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router'; // the redirecting of page done in component - where we know what page we are on
 
 @Component({
@@ -9,18 +9,39 @@ import {Router} from '@angular/router'; // the redirecting of page done in compo
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
 
   isLoginPage = true; // to use restAPI from firebase for signup details, or login details
   isLoading = false; // to display loading spinner (if true)
   authForm: FormGroup; // the form for user to input - always email and username for authentication
   error: string = null; // to get the error string - and display to user
+  userSubscription: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.initForm();
+
+
+    this.userSubscription = this.authService.user
+      .subscribe(user => { // when component initialized, subscribe to userAuthenticated change
+        // if (user) {
+        //   this.userAuthenticated = true;
+        // } else {
+        //   this.userAuthenticated = false;
+        // }
+        if (user) {
+          if (user.getToken() != null) {
+            this.router.navigate(['recipes']);
+          }
+        }
+        // does the same thing as above. also( = !user ? false:true;)
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
   }
 
   onSwitchmode(): void {

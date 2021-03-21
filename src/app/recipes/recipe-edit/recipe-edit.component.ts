@@ -1,22 +1,44 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {RecipeService} from '../recipe.service';
+import {filter, tap} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
   recipeKey: string;
   editMode = false;
   recipeForm: FormGroup;
   isInit = false;
+  sourceTable = 'pendingrecipes';
+  routerSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
               private router: Router) {
+
+    console.log(this.router.url);
+    if (this.router.url.includes('/recipes')) {
+      this.sourceTable = 'recipes';
+    }
+
+    this.routerSubscription = this.router.events.pipe(
+      filter((event => event instanceof NavigationEnd)),
+      tap(event => {
+        const ev = event as NavigationEnd;
+
+        if (ev.url.includes('/pending')) {
+          this.sourceTable = 'pendingrecipes';
+        } else {
+          this.sourceTable = 'recipes';
+        }
+      })
+    ).subscribe();
   }
 
   get controls(): AbstractControl[] { // a getter!
@@ -32,6 +54,12 @@ export class RecipeEditComponent implements OnInit {
         this.isInit = true;
       }
     );
+
+
+  }
+
+  ngOnDestroy(): void {
+    this.routerSubscription.unsubscribe();
   }
 
   onSubmit(): void { // when submitting the filled in recipe to recipe-service (to update the recipes array)
@@ -75,7 +103,7 @@ export class RecipeEditComponent implements OnInit {
     const recipeIngredients = new FormArray([]);
 
     if (this.editMode) { // if the recipe is in edit mode, load that recipe's details
-      const recipeDB = await this.recipeService.getRecipe(this.recipeKey, 'pendingrecipes');
+      const recipeDB = await this.recipeService.getRecipe(this.recipeKey, this.sourceTable);
       const recipe = recipeDB.recipe;
       recipeName = recipe.name;
       recipeImageUrl = recipe.imageUrl;

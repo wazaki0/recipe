@@ -109,12 +109,17 @@ export class RecipeService {
   }
 
   updateRecipe(key: string, recipe: Recipe, sourceTable: string, route: ActivatedRoute): void {
+    let nextRoute = 'recipes';
+    if (sourceTable === 'pendingrecipes') {
+      nextRoute = 'pending';
+    }
+
     recipe.userId = this.currentUser.id;
     this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`, recipe)
       .pipe(
         tap(response => {
           this.fetchRecipes(sourceTable).subscribe();
-          this.router.navigate(['../'], {relativeTo: route});
+          this.router.navigate([`/${nextRoute}`, `${key}`]);
         })
       ).subscribe();
   }

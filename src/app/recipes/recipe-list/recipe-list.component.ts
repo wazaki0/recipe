@@ -41,7 +41,12 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         // } else {
         //   this.userAuthenticated = false;
         // }
-        this.userAuthenticated = !!user; // does the same thing as above. also( = !user ? false:true;)
+        if (user) {
+          if (user.getToken() != null) {
+            this.userAuthenticated = true;
+          }
+        }
+        this.userAuthenticated = false; // does the same thing as above. also( = !user ? false:true;)
       });
 
     this.recipes = this.recipeService.getRecipes();

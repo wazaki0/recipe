@@ -17,7 +17,11 @@ const appRoutes: Routes = [ // each object represents a route in my recipe page
       {
         path: ':id',
         component: RecipeSpecificComponent
-      }
+      },
+      {
+        path: ':id/edit',
+        component: RecipeEditComponent
+      } // same component - but edit mode for a recipe
     ],
   },
   {

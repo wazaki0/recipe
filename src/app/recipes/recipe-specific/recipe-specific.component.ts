@@ -66,6 +66,9 @@ export class RecipeSpecificComponent implements OnInit {
   }
 
   onEditRecipe(): void {
+    if (this.sourceTable === 'recipes') {
+
+    }
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
