@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "untitled1": {
+    "tasty-delicious": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/untitled1",
+            "outputPath": "dist/tasty-delicious",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "untitled1:build"
+            "browserTarget": "tasty-delicious:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "untitled1:build:production"
+              "browserTarget": "tasty-delicious:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "untitled1:build"
+            "browserTarget": "tasty-delicious:build"
           }
         },
         "test": {
@@ -110,16 +110,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "untitled1:serve"
+            "devServerTarget": "tasty-delicious:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "untitled1:serve:production"
+              "devServerTarget": "tasty-delicious:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "untitled1"
+  "defaultProject": "tasty-delicious"
 }

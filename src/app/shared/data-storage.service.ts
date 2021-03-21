@@ -24,6 +24,15 @@ export class DataStorageService {
     // subscribe needs to be written even though not useful - so our http request goes through
   }
 
+  /* createRecipe(): Subscription {
+     const recipe: Recipe;
+     return this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json', recipe)
+       .subscribe(response => {
+         console.log(response);
+       });
+
+   }*/
+
   fetchRecipes(): Observable<Recipe[]> {
     /* pipe allows us to create imaginary pipes - where the information can be manipulated through different functions -
     without affecting the result (and being able to subscribe from component) */
