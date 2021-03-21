@@ -1,7 +1,7 @@
 import {ApprovalStatus, Recipe, RecipeDB} from './recipe.model';
 import {Observable, Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {map, tap} from 'rxjs/operators';
 import {User} from '../auth/user.module';
@@ -49,10 +49,8 @@ export class RecipeService {
   }
 
   fetchRecipes(): Observable<RecipeDB[]> {
-    const params: HttpParams = new HttpParams().set('orderBy', 'name').append('status', 'APPROVED');
 
-    return this.http.get<RecipeDB[]>('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json',
-      {params})
+    return this.http.get<RecipeDB[]>('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json')
       .pipe(
         // SECOND PART REQUEST FOR RECIPES (first part in auth.interceptor)
         map(recipes => { // map is an operator which transforms an HTTP request (in this case response - from application server)
@@ -84,7 +82,7 @@ export class RecipeService {
     recipe.userId = this.currentUser.id;
     recipe.status = ApprovalStatus.Pending;
 
-    this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json', recipe)
+    this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes.json', recipe)
       .pipe(
         tap(response => {
           console.log('add recipe response: ' + response);
