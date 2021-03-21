@@ -25,7 +25,11 @@ export class RecipeSpecificComponent implements OnInit {
         this.isLoading = true;
         this.recipeService.getRecipe(this.recipeKey).then(data => {
           this.recipeDB = data;
-          this.recipe = this.recipeDB.recipe;
+          if (data) {
+            this.recipe = this.recipeDB.recipe;
+          } else {
+            this.router.navigate(['/recipes']);
+          }
           this.isLoading = false;
         }); // no need to unsubscribe - angular does this for us
       }

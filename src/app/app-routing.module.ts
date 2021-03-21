@@ -15,6 +15,7 @@ const appRoutes: Routes = [ // each object represents a route in my recipe page
     canActivate: [AuthGuard], // requirements to view recipes, and what possible to view
     children: [
       {path: '', component: RecipeStartComponent},
+      {path: 'new', component: RecipeEditComponent}, // before :id - so recipes/new doesnt load recipe, but creates one
       {
         path: ':id',
         component: RecipeSpecificComponent

@@ -4,19 +4,25 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthService} from '../auth/auth.service';
 import {map, tap} from 'rxjs/operators';
+import {User} from '../auth/user.module';
 
 @Injectable({providedIn: 'root'})
 export class RecipeService {
   /* recipeSelected = new EventEmitter<Recipe>(); replaced by routing and
      subject - same function as eventemitter, but more efficient*/
   recipesChanged = new Subject<RecipeDB[]>();
-
+  currentUser: User;
 
   // Already saved onto database!
   private recipes: RecipeDB[] = [];
 
   constructor(private http: HttpClient,
               private authService: AuthService) {
+
+    this.authService.user
+      .subscribe(user => { // when component initialized, subscribe to userAuthenticated change
+        this.currentUser = user;
+      });
   }
 
   async getRecipe(key: string): Promise<RecipeDB> {
@@ -26,11 +32,14 @@ export class RecipeService {
       const recipeDb: RecipeDB = await this.http.get<Recipe>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
         .pipe(
           map(result => {
-            const recipe2 = {...result, ingredient: result.ingredients ? result.ingredients : []};
-            const recipeDB = new RecipeDB();
-            recipeDB.id = key;
-            recipeDB.recipe = recipe2;
-            return recipeDB;
+            if (result) {
+              const recipe2 = {...result, ingredient: result.ingredients ? result.ingredients : []};
+              const recipeDB = new RecipeDB();
+              recipeDB.id = key;
+              recipeDB.recipe = recipe2;
+              return recipeDB;
+            }
+            return null;
           })
         ).toPromise();
       console.log(recipeDb);
@@ -69,6 +78,7 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe): void {
+    recipe.userId = this.currentUser.id;
 
     this.http.post('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json', recipe)
       .pipe(
@@ -98,10 +108,12 @@ export class RecipeService {
   }
 
   deleteRecipe(key: string): void {
-    // TODO: delete on server and fetch list again
-
-    // this.recipes.splice(index, 1);
-    // this.recipesChanged.next(this.recipes.slice());
+    this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
+      .pipe(
+        tap(response => {
+          this.fetchRecipes().subscribe();
+        })
+      ).subscribe();
   }
 
   overwriteRecipes(recipes: RecipeDB[]): void { // sets all recipes wanted visible to our array of recipes visible
