@@ -19,7 +19,7 @@
       <h3>{{recipe.name}}</h3>
     </div>
   </div>
-  <div *ngIf="recipe.userId === currentUser.id" class="row">
+  <div *ngIf="currentUser && recipe.userId === currentUser.id" class="row">
     <div class="col-xs-12">
       <div appDropdown
            class="btn-group">

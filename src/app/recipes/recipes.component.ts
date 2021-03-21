@@ -1,23 +1,36 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+import {filter, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css']
 })
-export class RecipesComponent implements OnInit {
+export class RecipesComponent {
   // recipeItemClicked: Recipe; - not needed thanks to routing
 
-  constructor() {
+  sourceTable = 'recipes';
+
+  constructor(private router: Router) {
+    console.log(router.url);
+    if (router.url === '/pending') {
+      this.sourceTable = 'pendingrecipes';
+    }
+
+    router.events.pipe(
+      filter((event => event instanceof NavigationEnd)),
+      tap(event => {
+        const ev = event as NavigationEnd;
+
+        if (ev.url === '/pending') {
+          this.sourceTable = 'pendingrecipes';
+        } else {
+          this.sourceTable = 'recipes';
+        }
+      })
+    ).subscribe();
+
   }
 
-  ngOnInit(): void {
-    /*this.recipeService.recipeSelected.
-    subscribe(
-      (recipe: Recipe) => {this.recipeItemClicked = recipe; }
-      // the recipe is gotten from the event - when triggered from component recipe-item
-      // recipe-item triggers eventEmitter in recipe.service - which can be caught here using subscribe
-      // the recipe is then used to specify information for recipe-specific
-    );*/ // This command not needed anymore - as we can load the recipe thanks to routing in recipe-item.html
-  }
 }

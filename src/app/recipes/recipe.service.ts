@@ -48,9 +48,14 @@ export class RecipeService {
     return recipe;
   }
 
-  fetchRecipes(): Observable<RecipeDB[]> {
+  fetchRecipes(sourceTable: string): Observable<RecipeDB[]> {
+    /* const params: HttpParams = new HttpParams()
+       .set('orderBy', '"status"')
+       .set('status', '"APPROVED"');*/
+    // {params}
 
-    return this.http.get<RecipeDB[]>('https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes.json')
+    return this.http.get<RecipeDB[]>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}.json`
+    )
       .pipe(
         // SECOND PART REQUEST FOR RECIPES (first part in auth.interceptor)
         map(recipes => { // map is an operator which transforms an HTTP request (in this case response - from application server)
@@ -101,10 +106,10 @@ export class RecipeService {
 
   updateRecipe(key: string, recipe: Recipe): void {
     recipe.status = ApprovalStatus.Pending;
-    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`, recipe)
+    this.http.put(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/pendingrecipes/${key}.json`, recipe)
       .pipe(
         tap(response => {
-          this.fetchRecipes().subscribe();
+          this.fetchRecipes('pendingrecipes').subscribe();
         })
       ).subscribe();
   }
@@ -113,7 +118,7 @@ export class RecipeService {
     this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/recipes/${key}.json`)
       .pipe(
         tap(response => {
-          this.fetchRecipes().subscribe();
+          this.fetchRecipes('recipes').subscribe();
         })
       ).subscribe();
   }

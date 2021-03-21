@@ -13,10 +13,11 @@
         <!--        (the a is a hyperlink reference-->
         <!--         - its another way to get a click from text - that's why its link is "#" - it could be anything-->
         <!--         using (click) as an event - I then create that specific component (in this case recipe component) &ndash;&gt;-->
-        <li routerLinkActive="active"><a *ngIf="userAuthenticated" routerLink="/recipes">Recipes</a></li>
+        <li routerLinkActive="active"><a routerLink="/recipes">Recipes</a></li>
+        <li><a routerLink="/pending">Pending</a></li>
         <!-- uses routerLink to switch to component on click + routerLinkActive activates the css styles when clicked -->
         <!-- possible when authenticated -->
-        <li routerLinkActive="active"><a *ngIf="!userAuthenticated" routerLink="/auth">Authentication</a></li>
+        <li><a *ngIf="!userAuthenticated" routerLink="/auth">Authentication</a></li>
         <!-- possible when not authenticated -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
