@@ -66,9 +66,6 @@ export class RecipeSpecificComponent implements OnInit {
   }
 
   onEditRecipe(): void {
-    if (this.sourceTable === 'recipes') {
-
-    }
     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
@@ -80,7 +77,7 @@ export class RecipeSpecificComponent implements OnInit {
   }
 
   onDeleteRecipe(): void {
-    this.recipeService.deleteRecipe(this.recipeKey, this.sourceTable, this.route);
+    this.recipeService.deleteRecipe(this.recipeKey, this.sourceTable);
   }
 
   onApprove(): void {

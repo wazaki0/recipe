@@ -38,6 +38,9 @@
       <button (click)="onApprove()" class="btn btn-success">APPROVE</button>
       <button (click)="onDeleteRecipe()" class="btn btn-danger">DENY</button>
     </div>
+    <div *ngIf="recipeService.isAdmin() && sourceTable === 'recipes'">
+      <button (click)="onDeleteRecipe()" class="btn btn-danger">Delete recipe</button>
+    </div>
   </div>
   <div class="row">
     <div class="col-xs-12">

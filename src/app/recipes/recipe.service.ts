@@ -129,7 +129,7 @@ export class RecipeService {
       });
   }
 
-  updateRecipe(key: string, recipe: Recipe, sourceTable: string, route: ActivatedRoute): void {
+  updateRecipe(key: string, recipe: Recipe, sourceTable: string): void {
     let nextRoute = 'recipes';
     if (sourceTable === 'pendingrecipes') {
       nextRoute = 'pending';
@@ -145,12 +145,16 @@ export class RecipeService {
       ).subscribe();
   }
 
-  deleteRecipe(key: string, sourceTable: string = 'pendingrecipes', route: ActivatedRoute): void {
+  deleteRecipe(key: string, sourceTable: string = 'pendingrecipes'): void {
+    let nextRoute = 'recipes';
+    if (sourceTable === 'pendingrecipes') {
+      nextRoute = 'pending';
+    }
     this.http.delete(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}/${key}.json`)
       .pipe(
         tap(response => {
           this.fetchRecipes(sourceTable).subscribe();
-          this.router.navigate(['../'], {relativeTo: route});
+          this.router.navigate([`/${nextRoute}`]);
         })
       ).subscribe();
   }

@@ -65,7 +65,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   onSubmit(): void { // when submitting the filled in recipe to recipe-service (to update the recipes array)
 
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value, 'pendingrecipes', this.route);
+      this.recipeService.updateRecipe(this.recipeKey, this.recipeForm.value, 'pendingrecipes');
     } else {
       this.recipeService.addRecipe(this.recipeForm.value, 'pendingrecipes', this.route);
     }
