@@ -30,7 +30,10 @@ export class RecipeService {
   }
 
   isAdmin(): boolean {
-    return this.adminUsers.includes(this.currentUser.id);
+    if (this.currentUser) {
+      return this.adminUsers.includes(this.currentUser.id);
+    }
+    return false;
   }
 
   async getRecipe(key: string, sourceTable: string = 'recipes'): Promise<RecipeDB> {
@@ -61,11 +64,10 @@ export class RecipeService {
   fetchRecipes(sourceTable: string): Observable<RecipeDB[]> {
     const params: HttpParams = new HttpParams();
 
-    if (sourceTable === 'pendingrecipes') {
+    if (sourceTable === 'pendingrecipes' && !this.isAdmin()) {
       params.append('orderBy', '"userId"');
       params.append('equalTo', '"' + this.currentUser.id + '"');
     }
-
     // {params}
 
     return this.http.get<RecipeDB[]>(`https://recipe-tasty-and-delicious-default-rtdb.firebaseio.com/${sourceTable}.json`, {params}
@@ -91,6 +93,7 @@ export class RecipeService {
 
           return resultData;
         }), tap(recipes => {
+          console.log(recipes);
           this.overwriteRecipes(recipes);
           // overwrite the recipes through tap, which doesn't affect anything, only takes in the object emitted (recipe array)
         })
