@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -7,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  homeVideoURL = 'https://www.youtube.com/watch?v=BGKIaF6MTJg&ab_channel=Sara-ZakoAfricanGreyParrot';
+  homeVideoURL = 'https://www.youtube.com/watch?v=Fld3FOXrXws&ab_channel=Tasty%26Delicious';
+
   // video for home component
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

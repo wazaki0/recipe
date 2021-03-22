@@ -52,7 +52,9 @@ export class RecipeService {
             const recipeDB = new RecipeDB();
             recipeDB.id = key;
             recipeDB.recipe = recipe2;
-            return recipeDB;
+            if (sourceTable === 'recipes' || this.currentUser.id === recipeDB.recipe.userId || this.isAdmin()) {
+              return recipeDB;
+            }
           }
           return null;
         })
@@ -88,7 +90,9 @@ export class RecipeService {
             const recipeDB = new RecipeDB();
             recipeDB.id = key;
             recipeDB.recipe = recipe;
-            resultData.push(recipeDB);
+            if (sourceTable === 'recipes' || this.currentUser.id === recipeDB.recipe.userId || this.isAdmin()) {
+              resultData.push(recipeDB);
+            }
           });
 
           return resultData;
